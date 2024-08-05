@@ -22,6 +22,31 @@ namespace SoruSorApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Entities.Models.Answer", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("Entities.Models.Like", b =>
                 {
                     b.Property<int>("ID")
@@ -29,6 +54,9 @@ namespace SoruSorApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsLike")
                         .HasColumnType("bit");
@@ -55,9 +83,6 @@ namespace SoruSorApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AskedByUserID")
                         .HasColumnType("int");
@@ -121,6 +146,17 @@ namespace SoruSorApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Entities.Models.Answer", b =>
+                {
+                    b.HasOne("Entities.Models.Question", "Question")
+                        .WithOne("Answer")
+                        .HasForeignKey("Entities.Models.Answer", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("Entities.Models.Like", b =>
                 {
                     b.HasOne("Entities.Models.User", "LikedByUser")
@@ -161,6 +197,8 @@ namespace SoruSorApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Question", b =>
                 {
+                    b.Navigation("Answer");
+
                     b.Navigation("Likes");
                 });
 

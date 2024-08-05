@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoruSorApi", "SoruSorApi\SoruSorApi.csproj", "{A69158B5-CDEF-4A0E-A1CD-EA2324BCC93C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoruSorApi", "SoruSorApi\SoruSorApi.csproj", "{A69158B5-CDEF-4A0E-A1CD-EA2324BCC93C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{3A1BE32A-4CD3-4DC2-B8D0-79BC1C05F9E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{3A1BE32A-4CD3-4DC2-B8D0-79BC1C05F9E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{C902C1BF-C716-41C1-825E-20D6F8FBC02D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3A1BE32A-4CD3-4DC2-B8D0-79BC1C05F9E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A1BE32A-4CD3-4DC2-B8D0-79BC1C05F9E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A1BE32A-4CD3-4DC2-B8D0-79BC1C05F9E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C902C1BF-C716-41C1-825E-20D6F8FBC02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C902C1BF-C716-41C1-825E-20D6F8FBC02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C902C1BF-C716-41C1-825E-20D6F8FBC02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C902C1BF-C716-41C1-825E-20D6F8FBC02D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

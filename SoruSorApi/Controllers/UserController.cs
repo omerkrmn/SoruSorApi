@@ -1,14 +1,16 @@
 ﻿using Entities.DTOs;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SoruSorApi.Controllers.ControllerContract;
 using SoruSorApi.Repositories;
+using System.Text.Json;
 
 namespace SoruSorApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ControllerBase, IUserController
     {
         // get user by ID
         // Search user with name field or surname field
@@ -23,12 +25,26 @@ namespace SoruSorApi.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetUsers() { 
+        public IActionResult GetUsers()
+        {
             var users = _context.Users.ToList();
             return Ok(users);
         }
+        [HttpGet("{id:int}")]
+        public IActionResult GetOneUser([FromRoute]int id)
+        {
+            var user = _context.Users
+                .Include(q=>q.Questions)
+                .ThenInclude(l=>l.Likes)
+                .Where(u=>u.ID == id)
+                .FirstOrDefault();
+            if (user == null) return NotFound("User is not found");
+            return Ok(user);
+        }
+
         [HttpPost]
-        public IActionResult AddUser([FromBody] UserDTO userDto) {
+        public IActionResult AddUser([FromBody] UserDTO userDto)
+        {
             if (userDto == null) return BadRequest("user can not be null");
             var user = new User();
             user.Age = userDto.Age;
@@ -38,11 +54,11 @@ namespace SoruSorApi.Controllers
             user.Password = userDto.Password;
             user.Name = userDto.Name;
 
-            user.CreatedDate= DateTime.Now;
+            user.CreatedDate = DateTime.Now;
             user.Questions = [];
             _context.Users.Add(user);
             _context.SaveChanges();
-            return StatusCode(201,user);
+            return StatusCode(201, user);
 
         }
     }

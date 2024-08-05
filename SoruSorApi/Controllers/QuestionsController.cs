@@ -2,7 +2,9 @@
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SoruSorApi.Repositories;
+using System.Collections.Generic;
 
 namespace SoruSorApi.Controllers
 {
@@ -21,9 +23,14 @@ namespace SoruSorApi.Controllers
         [HttpGet]
         public IActionResult GetQuestions()
         {
-            var questions = _context.Questions.ToList();
+            return Ok();
+        }
+        [HttpGet("GetUserQuestions")]
+        public IActionResult GetUserQuestions([FromQuery(Name = "userId")] int userId)
+        {
+            return Ok();
 
-            return Ok(questions);
+
         }
         [HttpPost]
         public IActionResult PostQuestions([FromBody] QuestionDTO questionDTO)
@@ -45,7 +52,7 @@ namespace SoruSorApi.Controllers
 
             _context.Questions.Add(question);
             _context.SaveChanges();
-            return Ok(question);
+            return StatusCode(201);
         }
 
     }

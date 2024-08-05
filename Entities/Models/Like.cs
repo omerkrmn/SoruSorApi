@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    public class Like
+    public class Like : BaseEntity
     {
-        public int ID { get; set; }
         public bool IsLike { get; set; }
         public int QuestionID { get; set; }
         public int LikedByUserID { get; set; }

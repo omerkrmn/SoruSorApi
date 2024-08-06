@@ -1,12 +1,7 @@
-﻿using Entities.Models;
+﻿using Entities.Exceptions;
+using Entities.Models;
 using Repositories.Contracts;
-using Repositories.EFCore;
 using Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.EntityManager
 {
@@ -30,7 +25,7 @@ namespace Services.EntityManager
         public void DeleteOneLike(int id, bool trackChanges)
         {
             var entity = _manager.Like.GetOneLikeById(id, trackChanges);
-            if (entity == null) throw new Exception("Like is not found!");
+            if (entity == null) throw new EntityNotFoundException<Like>(id);
             _manager.Like.DeleteOneLike(entity);
             _manager.Save();
         }
@@ -43,14 +38,16 @@ namespace Services.EntityManager
 
         public Like GetOneLikeById(int id, bool trackChanges)
         {
-            return _manager.Like.GetOneLikeById(id, trackChanges);
+            var like =  _manager.Like.GetOneLikeById(id, trackChanges);
+            if(like == null) throw new EntityNotFoundException<Like>(id);
+            return like;
         }
 
         public void UpdateOneLike(int id, Like like, bool trackChanges)
         {
             if (like == null) throw new ArgumentNullException();
             var entity = _manager.Like.GetOneLikeById(id, trackChanges);
-            if (entity == null) throw new Exception("Like is not found");
+            if (entity == null) throw new EntityNotFoundException<Like>(id);
             entity.IsLike=like.IsLike;
             _manager.Like.UpdateOneLike(entity);
             _manager.Save();

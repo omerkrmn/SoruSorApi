@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Exceptions;
+using Entities.Models;
 using Repositories.Contracts;
 using Services.Contracts;
 using System;
@@ -29,7 +30,7 @@ namespace Services.EntityManager
         public void DeleteOneAnswer(int id, bool trackChanges)
         {
             var entity = _manager.Answer.GetOneAnswerById(id, trackChanges);
-            if (entity == null) throw new Exception("Answer is not found!");
+            if (entity == null) throw new EntityNotFoundException<Answer>(id);
             _manager.Answer.DeleteOneAnswer(entity);
             _manager.Save();
         }
@@ -42,13 +43,17 @@ namespace Services.EntityManager
 
         public Answer GetOneAnswerById(int id, bool trackChanges)
         {
-            return _manager.Answer.GetOneAnswerById(id, trackChanges);
+            var answer =  _manager.Answer.GetOneAnswerById(id, trackChanges);
+            if (answer == null) throw new EntityNotFoundException<Answer>(id);
+            return answer;
         }
 
         public void UpdateOneAnswer(int id, Answer answer, bool trackChanges)
         {
+            if(answer == null) throw new ArgumentNullException(nameof(answer));
             var entity = _manager.Answer.GetOneAnswerById(id, trackChanges);
-            if (entity == null) throw new Exception("not found");
+            if (entity == null) throw new EntityNotFoundException<User>(id);
+
             entity.AnswerText = answer.AnswerText;
 
             _manager.Answer.UpdateOneAnswer(entity);

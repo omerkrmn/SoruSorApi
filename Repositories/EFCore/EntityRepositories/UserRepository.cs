@@ -23,7 +23,7 @@ namespace Repositories.EFCore.EntityRepositories
         public IQueryable<User> GetAllUsers(bool trackChanges) => FindAll(trackChanges);
 
         public User GetOneUserById(int id, bool trackChanges) =>
-            FindByCondition(b => b.ID == id, trackChanges)
+            FindByCondition(b => b.Id == id, trackChanges)
             .SingleOrDefault();
 
         public void UpdateOneUser(User user) => Update(user);

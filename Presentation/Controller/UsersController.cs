@@ -1,4 +1,6 @@
-﻿using Entities.Models;
+﻿using Entities.Exceptions;
+using Entities.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using System;
@@ -13,6 +15,7 @@ namespace Presentation.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
+        
         private readonly IServiceManager _manager;
 
         public UserController(IServiceManager manager)
@@ -20,6 +23,18 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
-        
+        [HttpGet("{id:int}")]
+        public IActionResult GetOneUser([FromRoute] int id)
+        {
+            var user = _manager.UserService.GetOneUserById(id, false);
+            return Ok(user);
+        }
+        [HttpPost]
+        public IActionResult PostOneUser([FromBody] User user)
+        {
+            
+            _manager.UserService.CreateOneUser(user);
+            return Ok();    
+        }
     }
 }

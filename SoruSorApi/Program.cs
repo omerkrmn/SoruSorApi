@@ -14,6 +14,7 @@ builder.Services.ConfigRepositoryManager();
 builder.Services.ConfigServiceManager();
 
 var app = builder.Build();
+    app.ConfigureExceptionHandler();
 
 
 if (app.Environment.IsDevelopment()) 
@@ -21,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+if (app.Environment.IsProduction())
+    app.UseHsts();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

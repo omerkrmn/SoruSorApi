@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SoruSorApi.Repositories;
+using Repositories.EFCore;
 
 #nullable disable
 
 namespace SoruSorApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240805172918__startPoint")]
+    [Migration("20240806004438__startPoint")]
     partial class _startPoint
     {
         /// <inheritdoc />

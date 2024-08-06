@@ -9,10 +9,10 @@ namespace Repositories.Contracts
 {
     public interface IRepositoryBase<T>
     {
-        IQueryable<T> FindAll(bool trackChanges);
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        public IQueryable<T> FindAll(bool trackChanges);
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
+        public void Create(T entity);
+        public void Update(T entity);
+        public void Delete(T entity);
     }
 }

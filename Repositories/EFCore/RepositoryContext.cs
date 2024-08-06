@@ -1,5 +1,6 @@
 ﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repositories.EFCore.Config;
 
 namespace Repositories.EFCore
 {
@@ -16,37 +17,8 @@ namespace Repositories.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)  
         {
             base.OnModelCreating(modelBuilder);
-
-            // Question - Answer releationship
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.Answer)
-                .WithOne(a => a.Question)
-                .HasForeignKey<Answer>(a => a.QuestionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Question - AskedByUser relationship
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.AskedByUser)
-                .WithMany(u => u.Questions)
-                .HasForeignKey(q => q.AskedByUserID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Question - AskingTheUser relationship
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.AskingTheUser)
-                .WithMany()
-                .HasForeignKey(q => q.AskingTheUserID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Question Table created date default value
-            modelBuilder.Entity<Question>()
-                .Property(q => q.CreatedDate)
-                .HasDefaultValueSql("GETDATE()");
-
-            // User Table created date default value
-            modelBuilder.Entity<User>()
-                .Property(q => q.CreatedDate)
-                .HasDefaultValueSql("GETDATE()");
+            modelBuilder.ApplyConfiguration(new QuestionConfig());
+            modelBuilder.ApplyConfiguration(new UserConfig());   
         }
 
     }

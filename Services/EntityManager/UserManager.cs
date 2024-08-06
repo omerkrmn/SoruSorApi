@@ -1,6 +1,8 @@
-﻿using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts;
 using Services.Contracts;
 
@@ -9,15 +11,18 @@ namespace Services.EntityManager
     public class UserManager : IUserService
     {
         private readonly IRepositoryManager _manager;
+        private readonly IMapper _mapper;
 
-        public UserManager(IRepositoryManager manager)
+        public UserManager(IRepositoryManager manager, IMapper mapper)
         {
             _manager = manager;
+            _mapper = mapper;
         }
 
-        public User CreateOneUser(User user)
+        public User CreateOneUser(CreateForUserDTO createForUserDTO)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (createForUserDTO == null) throw new ArgumentNullException(nameof(createForUserDTO));
+            var user = _mapper.Map<User>(createForUserDTO);
             _manager.User.CreateOneUser(user);
             _manager.Save();
             return user;
@@ -51,11 +56,22 @@ namespace Services.EntityManager
             if (entity is null) throw new EntityNotFoundException<User>(id);
 
             // next quest use AutoMapper here
-            entity.Email = user.Email;
-            entity.PasswordHash = user.PasswordHash;
+            //entity.Email = user.Email;
+            //entity.PasswordHash = user.PasswordHash;
+
+
 
             _manager.User.UpdateOneUser(entity);
             _manager.Save();
+        }
+        public User GetOneUserWithQuestions(int id, bool trackChanges)
+        {
+          var user = _manager.User.GetAllUsers(trackChanges)
+         .Include(u => u.Questions) // Yalnızca doğrudan ilişkili Questions yüklenir
+         .Where(u=>u.Id == id)
+         .FirstOrDefault();
+            if (user == null) throw new EntityNotFoundException<User>(id);
+            return user;
         }
     }
 }

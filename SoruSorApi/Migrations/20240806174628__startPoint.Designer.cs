@@ -12,7 +12,7 @@ using Repositories.EFCore;
 namespace SoruSorApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240806015225__startPoint")]
+    [Migration("20240806174628__startPoint")]
     partial class _startPoint
     {
         /// <inheritdoc />
@@ -100,7 +100,8 @@ namespace SoruSorApi.Migrations
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("ID");
 

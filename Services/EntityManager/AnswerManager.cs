@@ -1,4 +1,5 @@
-﻿using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.Exceptions;
 using Entities.Models;
 using Repositories.Contracts;
 using Services.Contracts;
@@ -13,10 +14,12 @@ namespace Services.EntityManager
     public class AnswerManager : IAnswerService
     {
         private readonly IRepositoryManager _manager;
+        private readonly IMapper _mapper;
 
-        public AnswerManager(IRepositoryManager manager)
+        public AnswerManager(IRepositoryManager manager, IMapper mapper)
         {
             _manager = manager;
+            _mapper = mapper;
         }
 
         public Answer CreateAnswer(Answer answer)

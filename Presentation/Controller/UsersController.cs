@@ -1,4 +1,5 @@
-﻿using Entities.Exceptions;
+﻿using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +28,18 @@ namespace Presentation.Controller
         public IActionResult GetOneUser([FromRoute] int id)
         {
             var user = _manager.UserService.GetOneUserById(id, false);
+            var userWithQuestions = _manager.UserService.GetOneUserWithQuestions(id, false);
+            var questions=_manager.QuestionService.GetOneQuestionById(id, false);   
+
             return Ok(user);
         }
         [HttpPost]
-        public IActionResult PostOneUser([FromBody] User user)
+        public IActionResult PostOneUser([FromBody] CreateForUserDTO user)
         {
             
             _manager.UserService.CreateOneUser(user);
             return Ok();    
         }
+
     }
 }

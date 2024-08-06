@@ -8,7 +8,7 @@ namespace SoruSorApi.Extensions
     public static class ExceptionMiddlewareExtensions
     {
         /// <summary>
-        /// Configures the exception handler middleware to handle exceptions globally.
+        /// Configures the exception handler middleware to handle exceptions globally.<br></br>
         /// Logs the exception details and returns a generic error message to the client.
         /// </summary>
         /// <param name="app">The <see cref="WebApplication"/> instance to configure.</param>

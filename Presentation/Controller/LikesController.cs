@@ -12,9 +12,10 @@ namespace Presentation.Controller
     [ApiController]
     public class LikesController : ControllerBase
     {
-        //  list of likes (get)
-        //  question like or dislike (set)
-        //  question relike or redislike (delete)
+        // 
+        // list of likes (get)
+        // question like or dislike (set)
+        // question relike or redislike (delete)
         private readonly IServiceManager _manager;
 
         public LikesController(IServiceManager manager)

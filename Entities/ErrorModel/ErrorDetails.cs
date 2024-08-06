@@ -16,5 +16,6 @@ namespace Entities.ErrorModel
         {
             return JsonSerializer.Serialize(this);
         }
+
     }
 }

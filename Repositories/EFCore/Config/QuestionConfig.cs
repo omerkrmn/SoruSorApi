@@ -11,7 +11,7 @@ namespace Repositories.EFCore.Config
     {
         public void Configure(EntityTypeBuilder<Question> builder)
         {
-            // Question - Answer releationship
+            // Question - Answer relationship
             builder
                 .HasOne(q => q.Answer)
                 .WithOne(a => a.Question)
@@ -23,21 +23,19 @@ namespace Repositories.EFCore.Config
                 .HasOne(q => q.AskedByUser)
                 .WithMany(u => u.Questions)
                 .HasForeignKey(q => q.AskedByUserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Question - AskingTheUser relationship
             builder
                 .HasOne(q => q.AskingTheUser)
-                .WithMany()
+                .WithMany() // Kullanıcının sorularını takip eden bir koleksiyon yoksa boş bırakılır
                 .HasForeignKey(q => q.AskingTheUserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade); // Opsiyonel ilişki, silme işlemi yapma
 
             // Question Table created date default value
             builder
                 .Property(q => q.CreatedDate)
                 .HasDefaultValueSql("GETDATE()");
-
-
         }
     }
 }

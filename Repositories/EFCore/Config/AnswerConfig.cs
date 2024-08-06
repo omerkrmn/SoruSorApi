@@ -10,17 +10,11 @@ using System.Threading.Tasks;
 
 namespace Repositories.EFCore.Config
 {
-    public class UserConfig : IEntityTypeConfiguration<User>
+    public class AnswerConfig : IEntityTypeConfiguration<Answer>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<Answer> builder)
         {
-            // User Table created date default value
-            builder
-               .Property(q => q.CreatedDate)
-               .HasDefaultValueSql("GETDATE()");
-
-
-
+           //
         }
     }
 }

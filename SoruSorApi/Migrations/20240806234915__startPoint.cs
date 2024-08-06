@@ -46,7 +46,7 @@ namespace SoruSorApi.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    QuestionText = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AskedByUserID = table.Column<int>(type: "int", nullable: false),
                     AskingTheUserID = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
@@ -59,13 +59,12 @@ namespace SoruSorApi.Migrations
                         column: x => x.AskedByUserID,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Questions_Users_AskingTheUserID",
                         column: x => x.AskingTheUserID,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -113,8 +112,7 @@ namespace SoruSorApi.Migrations
                         name: "FK_Likes_Users_LikedByUserID",
                         column: x => x.LikedByUserID,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

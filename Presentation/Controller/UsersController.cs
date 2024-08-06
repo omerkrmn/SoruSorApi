@@ -1,4 +1,5 @@
 ﻿using Entities.DTOs;
+using Entities.DTOs.UserDTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -25,20 +26,22 @@ namespace Presentation.Controller
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetOneUser([FromRoute] int id)
+        public IActionResult GetOneUser([FromRoute]int id)
         {
             var user = _manager.UserService.GetOneUserById(id, false);
-            var userWithQuestions = _manager.UserService.GetOneUserWithQuestions(id, false);
-            var questions=_manager.QuestionService.GetOneQuestionById(id, false);   
-
             return Ok(user);
         }
         [HttpPost]
-        public IActionResult PostOneUser([FromBody] CreateForUserDTO user)
+        public IActionResult PostOneUser([FromBody] UserDtoForInsert userDTOInsert)
         {
-            
-            _manager.UserService.CreateOneUser(user);
-            return Ok();    
+            var userDto = _manager.UserService.CreateOneUser(userDTOInsert);
+            return StatusCode(201,userDto);    
+        }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            _manager.UserService.DeleteOneUser(id, true);
+            return NoContent();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Entities.DTOs;
+using Entities.DTOs.UserDTOs;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,11 @@ namespace Services.Contracts
 {
     public interface IUserService
     {
-        IEnumerable<User> GetAllUsers(bool trackChanges);
-        User GetOneUserById(int id, bool trackChanges);
-        User CreateOneUser(CreateForUserDTO createForUserDTO);
-        void UpdateOneUser(int id, User user,bool trackChanges);
+        IEnumerable<UserDTO> GetAllUsers(bool trackChanges);
+        UserDTO GetOneUserById(int id, bool trackChanges);
+        UserDTO CreateOneUser(UserDtoForInsert userDtoForInsert);
+        void UpdateOneUser(int id, UserDtoForUpdate userDtoForUpdate, bool trackChanges);
         void DeleteOneUser(int id, bool trackChanges);
-
-        //
-        public User GetOneUserWithQuestions(int id,bool trackChanges);
     }
 }
     

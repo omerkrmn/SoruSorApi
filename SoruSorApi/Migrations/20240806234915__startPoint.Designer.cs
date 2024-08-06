@@ -12,7 +12,7 @@ using Repositories.EFCore;
 namespace SoruSorApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240806174628__startPoint")]
+    [Migration("20240806234915__startPoint")]
     partial class _startPoint
     {
         /// <inheritdoc />
@@ -100,8 +100,7 @@ namespace SoruSorApi.Migrations
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -194,7 +193,7 @@ namespace SoruSorApi.Migrations
                     b.HasOne("Entities.Models.User", "LikedByUser")
                         .WithMany()
                         .HasForeignKey("LikedByUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Entities.Models.Question", "Question")
@@ -213,13 +212,13 @@ namespace SoruSorApi.Migrations
                     b.HasOne("Entities.Models.User", "AskedByUser")
                         .WithMany("Questions")
                         .HasForeignKey("AskedByUserID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Models.User", "AskingTheUser")
                         .WithMany()
                         .HasForeignKey("AskingTheUserID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("AskedByUser");

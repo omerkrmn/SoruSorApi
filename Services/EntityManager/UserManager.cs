@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.DTOs;
+using Entities.DTOs.UserDTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,59 +20,58 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public User CreateOneUser(CreateForUserDTO createForUserDTO)
+        public UserDTO CreateOneUser(UserDtoForInsert userDtoForInsert)
         {
-            if (createForUserDTO == null) throw new ArgumentNullException(nameof(createForUserDTO));
-            var user = _mapper.Map<User>(createForUserDTO);
-            _manager.User.CreateOneUser(user);
-            _manager.Save();
-            return user;
+            if (userDtoForInsert == null)
+                throw new ArgumentNullException(nameof(userDtoForInsert)); // Doğru parametre adı kullanıldı.
+
+            var user = _mapper.Map<User>(userDtoForInsert); // userDtoForInsert'dan User nesnesi oluşturuldu.
+            _manager.User.CreateOneUser(user); // User nesnesi oluşturuldu.
+            _manager.Save(); // Veritabanına kaydedildi.
+            var userdto = _mapper.Map<UserDTO>(user); // Oluşturulan User nesnesi UserDTO'ya dönüştürüldü.
+            return userdto; // UserDTO döndürüldü.
         }
 
         public void DeleteOneUser(int id, bool trackChanges)
         {
-            var user = _manager.User.GetOneUserById(id, trackChanges);
-            if (user is null) throw new EntityNotFoundException<User>(id);
-            _manager.User.DeleteOneUser(user);
-            _manager.Save();
-        }
+            var user = _manager.User.GetAllUsers(trackChanges)
+                .Include(b=>b.Questions)
+                .ThenInclude(b=>b.Answer)
+                .Where(u=>u.Id == id)
+                .SingleOrDefault();
 
-        public IEnumerable<User> GetAllUsers(bool trackChanges)
+            if (user == null) throw new EntityNotFoundException<User>(id);
+
+
+            _manager.User.DeleteOneUser(user); // Remove kullanarak entity'yi silin
+            _manager.Save(); // Değişiklikleri veritabanına kaydedin
+        }
+        public IEnumerable<UserDTO> GetAllUsers(bool trackChanges)
         {
             var users = _manager.User.GetAllUsers(trackChanges);
-            return users;
+            var dtos = _mapper.Map<IEnumerable<UserDTO>>(users);
+            return dtos;
         }
 
-        public User GetOneUserById(int id, bool trackChanges)
+        public UserDTO GetOneUserById(int id, bool trackChanges)
         {
-            var user = _manager.User.GetOneUserById(id, trackChanges);
-            if (user == null) throw new EntityNotFoundException<User>(id);
+            var entity = _manager.User.GetOneUserById(id, trackChanges);
+            if (entity == null) throw new EntityNotFoundException<User>(id);
+            var user = _mapper.Map<UserDTO>(entity);
             return user;
         }
 
-        public void UpdateOneUser(int id, User user, bool trackChanges)
+        public void UpdateOneUser(int id, UserDtoForUpdate userDtoForUpdate, bool trackChanges)
         {
-            if (user is null) throw new ArgumentNullException(nameof(user));
+            if (userDtoForUpdate is null) throw new ArgumentNullException(nameof(userDtoForUpdate));
             var entity = _manager.User.GetOneUserById(id, trackChanges);
-            if (entity is null) throw new EntityNotFoundException<User>(id);
+            if (entity is null)
+                throw new EntityNotFoundException<User>(id);
 
-            // next quest use AutoMapper here
-            //entity.Email = user.Email;
-            //entity.PasswordHash = user.PasswordHash;
-
-
+            _mapper.Map(userDtoForUpdate, entity);
 
             _manager.User.UpdateOneUser(entity);
             _manager.Save();
-        }
-        public User GetOneUserWithQuestions(int id, bool trackChanges)
-        {
-          var user = _manager.User.GetAllUsers(trackChanges)
-         .Include(u => u.Questions) // Yalnızca doğrudan ilişkili Questions yüklenir
-         .Where(u=>u.Id == id)
-         .FirstOrDefault();
-            if (user == null) throw new EntityNotFoundException<User>(id);
-            return user;
         }
     }
 }

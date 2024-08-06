@@ -19,6 +19,8 @@ namespace Repositories.EFCore
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new QuestionConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());   
+            modelBuilder.ApplyConfiguration(new LikeConfig());
+            modelBuilder.ApplyConfiguration(new AnswerConfig());
         }
 
     }

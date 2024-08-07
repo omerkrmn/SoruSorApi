@@ -8,6 +8,6 @@ namespace Entities.Models
         public int Age { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? ProfilePictureUrl { get; set; }
-        public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

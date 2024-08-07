@@ -11,28 +11,28 @@ namespace Repositories.EFCore.Config
     {
         public void Configure(EntityTypeBuilder<Question> builder)
         {
-            // Question - Answer relationship
+           
             builder
                 .HasOne(q => q.Answer)
                 .WithOne(a => a.Question)
                 .HasForeignKey<Answer>(a => a.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Question - AskedByUser relationship
+          
             builder
                 .HasOne(q => q.AskedByUser)
                 .WithMany(u => u.Questions)
                 .HasForeignKey(q => q.AskedByUserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Question - AskingTheUser relationship
+           
             builder
                 .HasOne(q => q.AskingTheUser)
-                .WithMany() // Kullanıcının sorularını takip eden bir koleksiyon yoksa boş bırakılır
+                .WithMany(u => u.Questions)
                 .HasForeignKey(q => q.AskingTheUserID)
-                .OnDelete(DeleteBehavior.Cascade); // Opsiyonel ilişki, silme işlemi yapma
+                .OnDelete(DeleteBehavior.Cascade); 
 
-            // Question Table created date default value
+            
             builder
                 .Property(q => q.CreatedDate)
                 .HasDefaultValueSql("GETDATE()");

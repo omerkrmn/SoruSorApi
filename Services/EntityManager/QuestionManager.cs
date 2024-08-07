@@ -1,4 +1,6 @@
-﻿using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Repositories.Contracts;
 using Services.Contracts;
@@ -13,17 +15,24 @@ namespace Services.EntityManager
     public class QuestionManager : IQuestionService
     {
         private readonly IRepositoryManager _manager;
+        private readonly IMapper _mapper;
 
-        public QuestionManager(IRepositoryManager manager)
+        public QuestionManager(IRepositoryManager manager, IMapper mapper)
         {
             _manager = manager;
+            _mapper = mapper;
         }
 
-        public Question CreateOneQuestion(Question question)
+        public  Question CreateOneQuestion(QuestionDTO questionDto)
         {
-            if (question == null) throw new ArgumentNullException(nameof(question));
+            if (questionDto == null)
+                throw new ArgumentNullException(nameof(questionDto), "QuestionDTO cannot be null.");
+
+            
+            var question = _mapper.Map<Question>(questionDto);
+
             _manager.Question.CreateOneQuestion(question);
-            _manager.Save();
+             _manager.Save(); // Asenkron save metodu
             return question;
         }
 
@@ -47,13 +56,6 @@ namespace Services.EntityManager
             if (question is null) throw new EntityNotFoundException<Question>(id);
             return question;
         }
-
-        /* 
-        An update here might be considered.
-        Normally, I don't want questions to be updated, but I will think about it.
-        Maybe updates could be allowed in these cases:
-        if the question hasn't received an answer yet or if less than 5 minutes have passed since the question was asked.
-        */
 
 
     }

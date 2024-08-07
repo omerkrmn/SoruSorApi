@@ -17,8 +17,9 @@ namespace Entities.Models
         public virtual User AskedByUser { get; set; }
         [JsonIgnore]
         public virtual User AskingTheUser { get; set; }
+
         public virtual Answer? Answer { get; set; }
-        public virtual ICollection<Like>? Likes { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
     }
 
 

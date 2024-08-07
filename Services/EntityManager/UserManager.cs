@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Entities.DTOs;
-using Entities.DTOs.UserDTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,32 +19,24 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public UserDTO CreateOneUser(UserDtoForInsert userDtoForInsert)
+        public UserDTO CreateOneUser(UserDTO userDTO)
         {
-            if (userDtoForInsert == null)
-                throw new ArgumentNullException(nameof(userDtoForInsert)); // Doğru parametre adı kullanıldı.
+            if (userDTO == null)
+                throw new ArgumentNullException(nameof(userDTO)); 
 
-            var user = _mapper.Map<User>(userDtoForInsert); // userDtoForInsert'dan User nesnesi oluşturuldu.
-            _manager.User.CreateOneUser(user); // User nesnesi oluşturuldu.
-            _manager.Save(); // Veritabanına kaydedildi.
-            var userdto = _mapper.Map<UserDTO>(user); // Oluşturulan User nesnesi UserDTO'ya dönüştürüldü.
-            return userdto; // UserDTO döndürüldü.
+            var user = _mapper.Map<User>(userDTO); 
+            _manager.User.CreateOneUser(user); 
+            _manager.Save(); 
+            var userdto = _mapper.Map<UserDTO>(user); 
+            return userdto;
         }
 
         public void DeleteOneUser(int id, bool trackChanges)
         {
-            var user = _manager.User.GetAllUsers(trackChanges)
-                .Include(b=>b.Questions)
-                .ThenInclude(b=>b.Answer)
-                .Where(u=>u.Id == id)
-                .SingleOrDefault();
-
-            if (user == null) throw new EntityNotFoundException<User>(id);
-
-
-            _manager.User.DeleteOneUser(user); // Remove kullanarak entity'yi silin
-            _manager.Save(); // Değişiklikleri veritabanına kaydedin
+            // Kodumun hatası burada !!!!!
         }
+
+
         public IEnumerable<UserDTO> GetAllUsers(bool trackChanges)
         {
             var users = _manager.User.GetAllUsers(trackChanges);
@@ -61,14 +52,14 @@ namespace Services.EntityManager
             return user;
         }
 
-        public void UpdateOneUser(int id, UserDtoForUpdate userDtoForUpdate, bool trackChanges)
+        public void UpdateOneUser(int id, UserDTO userDTO, bool trackChanges)
         {
-            if (userDtoForUpdate is null) throw new ArgumentNullException(nameof(userDtoForUpdate));
+            if (userDTO is null) throw new ArgumentNullException(nameof(userDTO));
             var entity = _manager.User.GetOneUserById(id, trackChanges);
             if (entity is null)
                 throw new EntityNotFoundException<User>(id);
 
-            _mapper.Map(userDtoForUpdate, entity);
+            _mapper.Map(userDTO, entity);
 
             _manager.User.UpdateOneUser(entity);
             _manager.Save();

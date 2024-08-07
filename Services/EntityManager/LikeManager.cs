@@ -1,4 +1,6 @@
-﻿using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Repositories.Contracts;
 using Services.Contracts;
@@ -8,16 +10,20 @@ namespace Services.EntityManager
     public class LikeManager : ILikeService
     {
         private readonly IRepositoryManager _manager;
+        private readonly IMapper _mapper;
 
-        public LikeManager(IRepositoryManager manager)
+        public LikeManager(IRepositoryManager manager, IMapper mapper)
         {
             _manager = manager;
+            _mapper = mapper;
         }
 
-        public Like CreateOneLike(Like like)
+        public LikeDTO CreateOneLike(LikeDTO like)
         {
             if (like == null) throw new ArgumentNullException(nameof(like));
-            _manager.Like.CreateOneLike(like);
+            Like newLike = new Like();
+            _mapper.Map(like, newLike);
+            _manager.Like.CreateOneLike(newLike);
             _manager.Save();
             return like;
         }

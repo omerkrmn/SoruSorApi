@@ -19,7 +19,8 @@ namespace Repositories.EFCore.Config
                .Property(q => q.CreatedDate)
                .HasDefaultValueSql("GETDATE()");
 
-
+            builder
+                .HasOne(b => b.Questions);
 
         }
     }

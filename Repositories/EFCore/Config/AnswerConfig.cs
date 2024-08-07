@@ -14,7 +14,15 @@ namespace Repositories.EFCore.Config
     {
         public void Configure(EntityTypeBuilder<Answer> builder)
         {
-           //
+            // for releationship and releation delete
+            builder
+                 .HasOne(a => a.Question)
+                 .WithOne(a => a.Answer)
+                 .OnDelete(DeleteBehavior.Cascade);
+            // create Default date 
+            builder
+               .Property(q => q.CreatedDate)
+               .HasDefaultValueSql("GETDATE()");
         }
     }
 }

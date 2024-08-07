@@ -1,5 +1,4 @@
 ﻿using Entities.DTOs;
-using Entities.DTOs.UserDTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +23,11 @@ namespace Presentation.Controller
         {
             _manager = manager;
         }
+        [HttpGet]
+        public IActionResult GetAllUsers() {
+            var users = _manager.UserService.GetAllUsers(false); // veya true, trackChanges ihtiyacınıza göre
+            return Ok(users);
+        }
 
         [HttpGet("{id:int}")]
         public IActionResult GetOneUser([FromRoute]int id)
@@ -32,9 +36,9 @@ namespace Presentation.Controller
             return Ok(user);
         }
         [HttpPost]
-        public IActionResult PostOneUser([FromBody] UserDtoForInsert userDTOInsert)
+        public IActionResult PostOneUser([FromBody] UserDTO userDTO)
         {
-            var userDto = _manager.UserService.CreateOneUser(userDTOInsert);
+            var userDto = _manager.UserService.CreateOneUser(userDTO);
             return StatusCode(201,userDto);    
         }
         [HttpDelete("{id}")]

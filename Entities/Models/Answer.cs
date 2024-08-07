@@ -6,10 +6,9 @@ namespace Entities.Models
     public class Answer : BaseEntity
     {
         public string? AnswerText { get; set; }
-        public int QuestionId { get; set; }
 
-        [ForeignKey(nameof(QuestionId))]
         [JsonIgnore]
+        public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
     }
 }

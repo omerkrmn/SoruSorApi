@@ -15,5 +15,6 @@ namespace Repositories.Contracts.EntityContracts
         void DeleteOneQuestion(Question question);
         void UpdateOneQuestion(Question question);
 
+
     }
 }

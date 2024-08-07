@@ -16,8 +16,8 @@ namespace Services
         {
             _userService = new Lazy<IUserService>(() => new UserManager(manager,mapper));
             _answerService = new Lazy<IAnswerService>(() => new AnswerManager(manager,mapper));
-            _questionService = new Lazy<IQuestionService>(() => new QuestionManager(manager));
-            _likeService = new Lazy<ILikeService>(() => new LikeManager(manager));
+            _questionService = new Lazy<IQuestionService>(() => new QuestionManager(manager,mapper));
+            _likeService = new Lazy<ILikeService>(() => new LikeManager(manager,mapper));
         }
         public IUserService UserService => _userService.Value;
         public IQuestionService QuestionService => _questionService.Value;

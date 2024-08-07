@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTOs;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Services.Contracts
     {
         IEnumerable<Like> GetAllLikes(bool trackChanges);
         Like GetOneLikeById(int id, bool trackChanges);
-        Like CreateOneLike(Like like);
+        LikeDTO CreateOneLike(LikeDTO like);
         void UpdateOneLike(int id, Like like, bool trackChanges);
         void DeleteOneLike(int id, bool trackChanges);
     }

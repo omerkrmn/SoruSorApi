@@ -12,8 +12,8 @@ using Repositories.EFCore;
 namespace SoruSorApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240806234915__startPoint")]
-    partial class _startPoint
+    [Migration("20240807043036_StartS")]
+    partial class StartS
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,9 +94,7 @@ namespace SoruSorApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
@@ -129,9 +127,7 @@ namespace SoruSorApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -182,7 +178,7 @@ namespace SoruSorApi.Migrations
                     b.HasOne("Entities.Models.Question", "Question")
                         .WithOne("Answer")
                         .HasForeignKey("Entities.Models.Answer", "QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -199,7 +195,7 @@ namespace SoruSorApi.Migrations
                     b.HasOne("Entities.Models.Question", "Question")
                         .WithMany("Likes")
                         .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("LikedByUser");

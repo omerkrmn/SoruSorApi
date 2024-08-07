@@ -5,14 +5,11 @@ namespace Entities.Models
     public class Like : BaseEntity
     {
         public bool IsLike { get; set; }
-        public int QuestionID { get; set; }
-        public int LikedByUserID { get; set; }
 
-        [ForeignKey(nameof(QuestionID))]
+        public int QuestionID { get; set; }
         public virtual Question? Question { get; set; }
 
-
-        [ForeignKey(nameof(LikedByUserID))]
+        public int LikedByUserID { get; set; }
         public virtual User LikedByUser { get; set; }
     }
 

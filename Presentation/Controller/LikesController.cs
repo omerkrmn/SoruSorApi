@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities.DTOs;
+using Entities.Exceptions;
+using Entities.Models;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,15 @@ namespace Presentation.Controller
         public LikesController(IServiceManager manager)
         {
             _manager = manager;
+        }
+
+        [HttpPost("question/AddLike")]
+        public IActionResult AddLike([FromBody]LikeDTO likeDto)
+        {
+            var user = _manager.UserService.GetOneUserById(likeDto.LikedByUserID, true);
+            if (user == null) throw new EntityNotFoundException<User>(likeDto.LikedByUserID);
+            _manager.LikeService.CreateOneLike(likeDto);
+            return Ok(likeDto);
         }
     }
 }

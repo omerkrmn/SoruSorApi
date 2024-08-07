@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTOs;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.EFCore;
 using Services.Contracts;
@@ -22,10 +23,13 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
-        [HttpPost]
-        public IActionResult PostQuestion([FromBody] Question question)
+        [HttpPost("AddQuestion")]
+        public IActionResult AddQuestion([FromBody] QuestionDTO questionDto)
         {
-            return Ok();
+            if (questionDto == null)
+                return BadRequest("Question data is null.");
+            _manager.QuestionService.CreateOneQuestion(questionDto);
+            return Ok(questionDto);
         }
 
         [HttpDelete("{id}")]

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DTOs.QuestionDTOs
+namespace Entities.DTOs
 {
-    public record QuestionDTO
+    public class QuestionDTO
     {
         public int ID { get; init; }
         public string QuestionText { get; init; }

@@ -4,23 +4,17 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models
 {
-    public class Question : BaseEntity
+    public class Question
     {
-        [Required(ErrorMessage ="QuestionText is a required field")]
-        public string QuestionText { get; set; }
-
-        public int AskedByUserID { get; set; }
-        public int AskingTheUserID { get; set; }
-
-
-        [JsonIgnore]
-        public virtual User AskedByUser { get; set; }
-        [JsonIgnore]
-        public virtual User AskingTheUser { get; set; }
-
-        public virtual Answer? Answer { get; set; }
-        public virtual ICollection<Like> Likes { get; set; }
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int AskedById { get; set; }
+        public User AskedBy { get; set; }
+        public int ReciveUserId { get; set; }
+        public virtual User ReciveUser { get; set; }
+        public int? AnswerId { get; set; }
+        public virtual Answer Answer { get; set; }
+        public virtual ICollection<Like> Likes { get; set; } // Sorunun beğenileri
     }
-
-
 }

@@ -21,7 +21,7 @@ namespace Repositories.EFCore.EntityRepositories
         public IQueryable<Like> GetAllLikes(bool trackChanges) => FindAll(trackChanges);
 
         public Like GetOneLikeById(int id, bool trackChanges) =>
-            FindByCondition(l => l.ID == id, trackChanges)
+            FindByCondition(l => l.Id == id, trackChanges)
             .SingleOrDefault();
 
         public void UpdateOneLike(Like like) => Update(like);

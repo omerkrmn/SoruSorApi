@@ -1,13 +1,8 @@
-﻿using Entities.DTOs;
-using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.DTOs;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Presentation.Controller
 {
@@ -15,24 +10,54 @@ namespace Presentation.Controller
     [ApiController]
     public class LikesController : ControllerBase
     {
-        // 
-        // list of likes (get)
-        // question like or dislike (set)
-        // question relike or redislike (delete)
         private readonly IServiceManager _manager;
+        private readonly IMapper _mapper;
 
-        public LikesController(IServiceManager manager)
+        public LikesController(IMapper mapper, IServiceManager manager)
         {
+            _mapper = mapper;
             _manager = manager;
         }
 
-        [HttpPost("question/AddLike")]
-        public IActionResult AddLike([FromBody]LikeDTO likeDto)
+        [HttpGet]
+        public IActionResult GetAllLikes()
         {
-            var user = _manager.UserService.GetOneUserById(likeDto.LikedByUserID, true);
-            if (user == null) throw new EntityNotFoundException<User>(likeDto.LikedByUserID);
-            _manager.LikeService.CreateOneLike(likeDto);
+            var likes = _manager.LikeService.GetAllLikes(false);
+            var likeDtos = _mapper.Map<IEnumerable<LikeDto>>(likes);
+            return Ok(likeDtos);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetLikeById(int id)
+        {
+            var like = _manager.LikeService.GetOneLikeById(id, false);
+            var likeDto = _mapper.Map<LikeDto>(like);
             return Ok(likeDto);
+        }
+
+        [HttpPost("AddLike")]
+        public IActionResult AddLike([FromBody] LikeDtoForInsert likeDtoForInsert)
+        {
+            if (likeDtoForInsert == null) return BadRequest("Like data is null.");
+            var createdLike = _manager.LikeService.CreateOneLike(likeDtoForInsert);
+            var createdLikeDto = _mapper.Map<LikeDto>(createdLike);
+            return CreatedAtAction(nameof(GetLikeById), new { id = createdLikeDto.Id }, createdLikeDto);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateLike(int id, [FromBody] LikeDto likeDto)
+        {
+            if (likeDto == null) return BadRequest("Like data is null.");
+
+            _manager.LikeService.UpdateOneLike(id, likeDto, true);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteLike(int id)
+        {
+            _manager.LikeService.DeleteOneLike(id, true);
+            return NoContent();
         }
     }
 }

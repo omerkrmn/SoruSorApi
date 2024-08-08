@@ -8,28 +8,39 @@ namespace SoruSorApi.Utilities
     {
         public MappingProfile()
         {
-            CreateMap<UserDTO,User>();
-            CreateMap<User,UserDTO>();
+            // User mappings
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+            CreateMap<UserDtoForInsert, User>();
+            CreateMap<User, UserDtoForInsert>();
 
-            //CreateMap<UserDtoForUpdate,User>();
-            //CreateMap<User, UserDtoForUpdate>();
+            // Question mappings
+            CreateMap<Question, QuestionDto>();
+            CreateMap<QuestionDto, Question>();
+            CreateMap<QuestionDtoForInsert, Question>();
+            CreateMap<Question, QuestionDtoForInsert>();
 
-            //CreateMap<UserDtoForInsert,User>();
-            //CreateMap<User, UserDtoForInsert>();
-            CreateMap<Like, LikeDTO>();
-            CreateMap<Answer, AnswerDTO>();
-            CreateMap<Question, QuestionWithDetailsDTO>()
-                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes))
-                .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answer));
+            // Answer mappings
+            CreateMap<Answer, AnswerDto>();
+            CreateMap<AnswerDto, Answer>();
+            CreateMap<AnswerDtoForInsert, Answer>();
+            CreateMap<Answer, AnswerDtoForInsert>();
 
-            CreateMap<QuestionDTO,Question>();
-            CreateMap<Question,QuestionDTO>();
+            // Like mappings
+            CreateMap<Like, LikeDto>();
+            CreateMap<LikeDto, Like>();
+            CreateMap<Like, LikeDtoForInsert>();
+            CreateMap<LikeDtoForInsert, Like>();
 
-            CreateMap<Answer, AnswerDTO>();
-            CreateMap<AnswerDTO, Answer>();
+            // Mapping for QuestionsDetailsDTO
+            CreateMap<Question, QuestionsDetailsDTO>()
+                .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.Likes.Count(like => like.IsLike)))
+                .ForMember(dest => dest.DislikeCount, opt => opt.MapFrom(src => src.Likes.Count(like => !like.IsLike)))
+                .ForMember(dest => dest.Answer, opt => opt.MapFrom(src => src.Answer));
 
-            CreateMap<LikeDTO, Like>();
-            CreateMap<Like, LikeDTO>();
+            CreateMap<QuestionsDetailsDTO, Question>()
+                .ForMember(dest => dest.Answer, opt => opt.MapFrom(src => src.Answer))
+                .ForMember(dest => dest.Likes, opt => opt.Ignore()); // Ignore Likes during mapping
         }
     }
 }

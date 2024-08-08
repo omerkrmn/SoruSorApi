@@ -24,22 +24,25 @@ namespace SoruSorApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Answer", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnswerText")
+                    b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("QuestionId")
                         .IsUnique();
@@ -49,59 +52,61 @@ namespace SoruSorApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Like", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsLike")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LikedByUserID")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionID")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("LikedByUserID");
+                    b.HasIndex("QuestionId");
 
-                    b.HasIndex("QuestionID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Entities.Models.Question", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AskedByUserID")
+                    b.Property<int?>("AnswerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AskingTheUserID")
+                    b.Property<int>("AskedById")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("QuestionText")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.HasIndex("AskedByUserID");
+                    b.Property<int>("ReciveUserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("AskingTheUserID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AskedById");
+
+                    b.HasIndex("ReciveUserId");
 
                     b.ToTable("Questions");
                 });
@@ -114,55 +119,27 @@ namespace SoruSorApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
+                    b.Property<string>("Mail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NormalizedUserName")
+                    b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePictureUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -175,7 +152,7 @@ namespace SoruSorApi.Migrations
                     b.HasOne("Entities.Models.Question", "Question")
                         .WithOne("Answer")
                         .HasForeignKey("Entities.Models.Answer", "QuestionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -183,52 +160,57 @@ namespace SoruSorApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Like", b =>
                 {
-                    b.HasOne("Entities.Models.User", "LikedByUser")
-                        .WithMany()
-                        .HasForeignKey("LikedByUserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Entities.Models.Question", "Question")
                         .WithMany("Likes")
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("LikedByUser");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Entities.Models.Question", b =>
-                {
-                    b.HasOne("Entities.Models.User", "AskedByUser")
-                        .WithMany("Questions")
-                        .HasForeignKey("AskedByUserID")
+                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Models.User", "AskingTheUser")
-                        .WithMany()
-                        .HasForeignKey("AskingTheUserID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Entities.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AskedByUser");
+                    b.Navigation("Question");
 
-                    b.Navigation("AskingTheUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Models.Question", b =>
                 {
-                    b.Navigation("Answer");
+                    b.HasOne("Entities.Models.User", "AskedBy")
+                        .WithMany("QuestionsAsked")
+                        .HasForeignKey("AskedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.User", "ReciveUser")
+                        .WithMany("QuestionsReceived")
+                        .HasForeignKey("ReciveUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AskedBy");
+
+                    b.Navigation("ReciveUser");
+                });
+
+            modelBuilder.Entity("Entities.Models.Question", b =>
+                {
+                    b.Navigation("Answer")
+                        .IsRequired();
 
                     b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
-                    b.Navigation("Questions");
+                    b.Navigation("Likes");
+
+                    b.Navigation("QuestionsAsked");
+
+                    b.Navigation("QuestionsReceived");
                 });
 #pragma warning restore 612, 618
         }

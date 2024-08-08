@@ -14,13 +14,7 @@ namespace Repositories.EFCore.Config
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            // User Table created date default value
-            builder
-               .Property(q => q.CreatedDate)
-               .HasDefaultValueSql("GETDATE()");
-
-            builder
-                .HasOne(b => b.Questions);
+           //
 
         }
     }

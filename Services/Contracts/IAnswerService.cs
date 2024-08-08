@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTOs;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Services.Contracts
 {
     public interface IAnswerService
     {
-        IEnumerable<Answer> GetAllAnswers(bool trackChanges);
-        Answer GetOneAnswerById(int id, bool trackChanges);
-        Answer CreateAnswer(Answer answer);
-        void UpdateOneAnswer(int id, Answer answer, bool trackChanges);
+        IEnumerable<AnswerDto> GetAllAnswers(bool trackChanges);
+        AnswerDto GetOneAnswerById(int id, bool trackChanges);
+        AnswerDto CreateAnswer(AnswerDtoForInsert answer);
+        void UpdateOneAnswer(AnswerDto answer, bool trackChanges);
         void DeleteOneAnswer(int id, bool trackChanges);
     }
 }

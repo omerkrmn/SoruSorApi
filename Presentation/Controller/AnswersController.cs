@@ -1,4 +1,5 @@
-﻿using Entities.Exceptions;
+﻿using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
@@ -21,24 +22,29 @@ namespace Presentation.Controller
             _manager = manager;
         }
         [HttpPost("AddAnswer")]
-        public IActionResult AddAnswer(int questionId,string answerText)
+        public IActionResult AddAnswer([FromQuery] int questionId, [FromQuery] string answerText)
         {
-            var question = _manager.QuestionService.GetOneQuestionById(questionId, true);
-            if (question == null) throw new EntityNotFoundException<Question>(questionId);
+            if (string.IsNullOrEmpty(answerText))
+                return BadRequest("Answer text cannot be null or empty.");
 
-            var answers = _manager.AnswerService
-                .GetAllAnswers(false)
-                .Where(b => b.QuestionId == questionId);
-
-            var answer = new Answer()
+            var answerDto = new AnswerDtoForInsert
             {
-                AnswerText = answerText,
-                CreatedDate = DateTime.Now,
                 QuestionId = questionId,
-                Question = question
+                Content = answerText
             };
-            _manager.AnswerService.CreateAnswer(answer);
-            return StatusCode(201,answer);
+
+            var createdAnswer = _manager.AnswerService.CreateAnswer(answerDto);
+
+            return CreatedAtAction(nameof(GetOneAnswerById), new { id = createdAnswer.Id }, createdAnswer);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetOneAnswerById(int id)
+        {
+
+            var answer = _manager.AnswerService.GetOneAnswerById(id, false);
+            return Ok(answer);
+
         }
     }
 }

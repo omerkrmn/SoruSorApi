@@ -12,30 +12,7 @@ namespace Repositories.EFCore.Config
         public void Configure(EntityTypeBuilder<Question> builder)
         {
            
-            builder
-                .HasOne(q => q.Answer)
-                .WithOne(a => a.Question)
-                .HasForeignKey<Answer>(a => a.QuestionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-          
-            builder
-                .HasOne(q => q.AskedByUser)
-                .WithMany(u => u.Questions)
-                .HasForeignKey(q => q.AskedByUserID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-           
-            builder
-                .HasOne(q => q.AskingTheUser)
-                .WithMany(u => u.Questions)
-                .HasForeignKey(q => q.AskingTheUserID)
-                .OnDelete(DeleteBehavior.Cascade); 
-
-            
-            builder
-                .Property(q => q.CreatedDate)
-                .HasDefaultValueSql("GETDATE()");
+           //
         }
     }
 }

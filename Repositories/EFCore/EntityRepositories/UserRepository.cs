@@ -20,10 +20,13 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void DeleteOneUser(User user) => Delete(user);
 
-        public IQueryable<User> GetAllUsers(bool trackChanges) => FindAll(trackChanges);
+        public IQueryable<User> GetAllUsers(bool trackChanges) => 
+            FindAll(trackChanges)
+            .Where(u => u.IsActive == true);
 
         public User GetOneUserById(int id, bool trackChanges) =>
             FindByCondition(b => b.Id == id, trackChanges)
+            .Where(u=>u.IsActive==true)
             .SingleOrDefault();
 
         public void UpdateOneUser(User user) => Update(user);

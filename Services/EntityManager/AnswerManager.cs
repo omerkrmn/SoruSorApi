@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Repositories.Contracts;
@@ -6,8 +7,6 @@ using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.EntityManager
 {
@@ -22,44 +21,49 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public Answer CreateAnswer(Answer answer)
+        public IEnumerable<AnswerDto> GetAllAnswers(bool trackChanges)
         {
-            if (answer == null) throw new ArgumentNullException(nameof(answer));
+            var answers = _manager.Answer.GetAllAnswers(trackChanges);
+            return _mapper.Map<IEnumerable<AnswerDto>>(answers);
+        }
+
+        public AnswerDto GetOneAnswerById(int id, bool trackChanges)
+        {
+            var answer = _manager.Answer.GetOneAnswerById(id, trackChanges);
+            if (answer == null) throw new EntityNotFoundException<Answer>(id);
+            return _mapper.Map<AnswerDto>(answer);
+        }
+
+        public AnswerDto CreateAnswer(AnswerDtoForInsert answerDto)
+        {
+            if (answerDto == null) throw new ArgumentNullException(nameof(answerDto));
+
+            var answer = _mapper.Map<Answer>(answerDto);
             _manager.Answer.CreateOneAnswer(answer);
             _manager.Save();
-            return answer;
+
+            return _mapper.Map<AnswerDto>(answer);
+        }
+
+        public void UpdateOneAnswer(AnswerDto answerDto, bool trackChanges)
+        {
+            if (answerDto == null) throw new ArgumentNullException(nameof(answerDto));
+
+            var entity = _manager.Answer.GetOneAnswerById(answerDto.Id, trackChanges);
+            if (entity == null) throw new EntityNotFoundException<Answer>(answerDto.Id);
+
+            _mapper.Map(answerDto, entity);
+
+            _manager.Answer.UpdateOneAnswer(entity);
+            _manager.Save();
         }
 
         public void DeleteOneAnswer(int id, bool trackChanges)
         {
             var entity = _manager.Answer.GetOneAnswerById(id, trackChanges);
             if (entity == null) throw new EntityNotFoundException<Answer>(id);
+
             _manager.Answer.DeleteOneAnswer(entity);
-            _manager.Save();
-        }
-
-        public IEnumerable<Answer> GetAllAnswers(bool trackChanges)
-        {
-            var answers = _manager.Answer.GetAllAnswers(trackChanges);
-            return answers;
-        }
-
-        public Answer GetOneAnswerById(int id, bool trackChanges)
-        {
-            var answer =  _manager.Answer.GetOneAnswerById(id, trackChanges);
-            if (answer == null) throw new EntityNotFoundException<Answer>(id);
-            return answer;
-        }
-
-        public void UpdateOneAnswer(int id, Answer answer, bool trackChanges)
-        {
-            if(answer == null) throw new ArgumentNullException(nameof(answer));
-            var entity = _manager.Answer.GetOneAnswerById(id, trackChanges);
-            if (entity == null) throw new EntityNotFoundException<User>(id);
-
-            entity.AnswerText = answer.AnswerText;
-
-            _manager.Answer.UpdateOneAnswer(entity);
             _manager.Save();
         }
     }

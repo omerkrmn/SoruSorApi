@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Entities.DTOs
 {
-    public class AnswerDto
+    public class QuestionDtoForInsert
     {
-        public int Id { get; set; }
         public string Content { get; set; }
-        public int QuestionId { get; set; }
-        public int AnsweredById { get; set; }
+        public int AskedById { get; set; }
+        public int ReciveUserId { get; set; }
     }
 }

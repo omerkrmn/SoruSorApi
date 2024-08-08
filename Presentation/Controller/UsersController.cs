@@ -1,14 +1,7 @@
 ﻿using Entities.DTOs;
-using Entities.Exceptions;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Presentation.Controller
 {
@@ -25,7 +18,7 @@ namespace Presentation.Controller
         }
         [HttpGet]
         public IActionResult GetAllUsers() {
-            var users = _manager.UserService.GetAllUsers(false); // veya true, trackChanges ihtiyacınıza göre
+            var users = _manager.UserService.GetAllUsers(false); 
             return Ok(users);
         }
 
@@ -35,18 +28,24 @@ namespace Presentation.Controller
             var user = _manager.UserService.GetOneUserById(id, false);
             return Ok(user);
         }
-        [HttpPost]
-        public IActionResult PostOneUser([FromBody] UserDTO userDTO)
+        [HttpPost("CreateOneUser")]
+        public IActionResult CreateOneUser([FromBody()] UserDtoForInsert UserDtoForInsert)
         {
-            var userDto = _manager.UserService.CreateOneUser(userDTO);
-            return StatusCode(201,userDto);    
+            var user = _manager.UserService.CreateOneUser(UserDtoForInsert);
+            return StatusCode(201,user);
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        public IActionResult DeleteUser(UserDto userDto)
         {
-            _manager.UserService.DeleteOneUser(id, true);
+            _manager.UserService.DeleteOneUser(userDto, true);
             return NoContent();
         }
 
+        [HttpPut]
+        public IActionResult UpdateUser([FromBody]UserDto userDto) 
+        {
+            var user = _manager.UserService.UpdateOneUser(userDto,true);
+            return Ok(user);
+        }
     }
 }

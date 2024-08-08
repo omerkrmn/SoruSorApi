@@ -21,7 +21,7 @@ namespace Repositories.EFCore.EntityRepositories
         public IQueryable<Answer> GetAllAnswers(bool trackChanges)=>FindAll(trackChanges);
 
         public Answer GetOneAnswerById(int id, bool trackChanges) =>
-            FindByCondition(a => a.ID == id, trackChanges)
+            FindByCondition(a => a.Id == id, trackChanges)
             .SingleOrDefault();
         public void UpdateOneAnswer(Answer answer)=>Update(answer);
     }

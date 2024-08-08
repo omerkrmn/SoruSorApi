@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entities.DTOs
 {
-
-    public class QuestionsAndDetailsOfUserDTO
+    public class LikeDtoForInsert
     {
+        public bool IsLike { get; set; }
         public int UserId { get; set; }
-        public string UserName { get; set; }
-        public IEnumerable<QuestionWithDetailsDTO> Questions { get; set; }
+        public int QuestionId { get; set; }
     }
 }

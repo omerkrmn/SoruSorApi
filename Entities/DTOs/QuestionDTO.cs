@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Entities.DTOs
 {
-    public class QuestionDTO
+    public class QuestionDto
     {
-        public int ID { get; init; }
-        public string QuestionText { get; init; }
-        [Required]
-        public int AskedByUserID { get; init; }
-        [Required]
-        public int AskingTheUserID { get; init; }
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public int AskedById { get; set; }
+        public int ReciveUserId { get; set; }
     }
 }

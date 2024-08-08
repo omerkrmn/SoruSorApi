@@ -19,50 +19,54 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public UserDTO CreateOneUser(UserDTO userDTO)
+        public UserDto CreateOneUser(UserDtoForInsert userDtoForInsert)
         {
-            if (userDTO == null)
-                throw new ArgumentNullException(nameof(userDTO)); 
-
-            var user = _mapper.Map<User>(userDTO); 
-            _manager.User.CreateOneUser(user); 
-            _manager.Save(); 
-            var userdto = _mapper.Map<UserDTO>(user); 
-            return userdto;
+            if (userDtoForInsert == null)
+                throw new ArgumentNullException(nameof(userDtoForInsert));
+            var user = _mapper.Map<User>(userDtoForInsert); 
+            _manager.User.CreateOneUser(user);
+            _manager.Save();
+            var entity = _mapper.Map<UserDto>(user);
+            return entity;
         }
 
-        public void DeleteOneUser(int id, bool trackChanges)
+        public void DeleteOneUser(UserDto userDto, bool trackChanges)
         {
-            // Kodumun hatası burada !!!!!
+            var user = _manager.User.GetOneUserById(userDto.Id, trackChanges);
+            if (user == null) throw new EntityNotFoundException<User>(userDto.Id);
+            user.IsActive = false;
+            _manager.Save();
         }
 
 
-        public IEnumerable<UserDTO> GetAllUsers(bool trackChanges)
+        public IEnumerable<UserDto> GetAllUsers(bool trackChanges)
         {
-            var users = _manager.User.GetAllUsers(trackChanges);
-            var dtos = _mapper.Map<IEnumerable<UserDTO>>(users);
-            return dtos;
+            var entities = _manager.User.GetAllUsers(trackChanges).Where(u=>u.IsActive == true);
+            var users = _mapper.Map<IEnumerable<UserDto>>(entities);
+            return users;
         }
 
-        public UserDTO GetOneUserById(int id, bool trackChanges)
+        public UserDto GetOneUserById(int id, bool trackChanges)
         {
             var entity = _manager.User.GetOneUserById(id, trackChanges);
             if (entity == null) throw new EntityNotFoundException<User>(id);
-            var user = _mapper.Map<UserDTO>(entity);
+            var user = _mapper.Map<UserDto>(entity);
             return user;
         }
 
-        public void UpdateOneUser(int id, UserDTO userDTO, bool trackChanges)
+
+        public UserDto UpdateOneUser(UserDto userDto, bool trackChanges)
         {
-            if (userDTO is null) throw new ArgumentNullException(nameof(userDTO));
-            var entity = _manager.User.GetOneUserById(id, trackChanges);
-            if (entity is null)
-                throw new EntityNotFoundException<User>(id);
-
-            _mapper.Map(userDTO, entity);
-
+            if (userDto is null) throw new ArgumentNullException(nameof(userDto));
+            var entity = _manager.User.GetOneUserById(userDto.Id, trackChanges);
+          if (entity is null) throw new EntityNotFoundException<User>(userDto.Id);
+            
+            _mapper.Map(userDto, entity);
             _manager.User.UpdateOneUser(entity);
             _manager.Save();
+            return userDto;
         }
+
+
     }
 }

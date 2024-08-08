@@ -14,6 +14,6 @@ namespace Services.Contracts
         LikeDto GetOneLikeById(int id, bool trackChanges);
         LikeDto CreateOneLike(LikeDtoForInsert likeInsertDto);
         void UpdateOneLike(int id, LikeDto likedto, bool trackChanges);
-        void DeleteOneLike(int id, bool trackChanges);
+        void DeleteOneLike(int userId, int questionId, bool trackChanges);
     }
 }

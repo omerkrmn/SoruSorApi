@@ -62,13 +62,17 @@ namespace Services.EntityManager
             _manager.Save();
         }
 
-        public void DeleteOneLike(int id, bool trackChanges)
+        public void DeleteOneLike(int userId, int questionId, bool trackChanges)
         {
-            var entity = _manager.Like.GetOneLikeById(id, trackChanges);
-            if (entity == null) throw new EntityNotFoundException<Like>(id);
+            var like = _manager.Like.GetAllLikes(false)
+                 .Where(x => x.QuestionId == questionId && x.UserId == userId)
+                 .SingleOrDefault();
+            if (like == null) throw new ArgumentNullException(nameof(like));
 
-            _manager.Like.DeleteOneLike(entity);
+            _manager.Like.DeleteOneLike(like);
             _manager.Save();
         }
+
+        
     }
 }

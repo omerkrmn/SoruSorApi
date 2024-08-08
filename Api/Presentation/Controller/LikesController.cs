@@ -19,21 +19,21 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
-        [HttpGet]
-        public IActionResult GetAllLikes()
-        {
-            var likes = _manager.LikeService.GetAllLikes(false);
-            var likeDtos = _mapper.Map<IEnumerable<LikeDto>>(likes);
-            return Ok(likeDtos);
-        }
+        //[HttpGet]
+        //public IActionResult GetAllLikes()
+        //{
+        //    var likes = _manager.LikeService.GetAllLikes(false);
+        //    var likeDtos = _mapper.Map<IEnumerable<LikeDto>>(likes);
+        //    return Ok(likeDtos);
+        //}
 
-        [HttpGet("{id}")]
-        public IActionResult GetLikeById(int id)
-        {
-            var like = _manager.LikeService.GetOneLikeById(id, false);
-            var likeDto = _mapper.Map<LikeDto>(like);
-            return Ok(likeDto);
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult GetLikeById(int id)
+        //{
+        //    var like = _manager.LikeService.GetOneLikeById(id, false);
+        //    var likeDto = _mapper.Map<LikeDto>(like);
+        //    return Ok(likeDto);
+        //}
 
         [HttpPost("AddLike")]
         public IActionResult AddLike([FromBody] LikeDtoForInsert likeDtoForInsert)
@@ -41,22 +41,21 @@ namespace Presentation.Controller
             if (likeDtoForInsert == null) return BadRequest("Like data is null.");
             var createdLike = _manager.LikeService.CreateOneLike(likeDtoForInsert);
             var createdLikeDto = _mapper.Map<LikeDto>(createdLike);
-            return CreatedAtAction(nameof(GetLikeById), new { id = createdLikeDto.Id }, createdLikeDto);
+            return StatusCode(201, createdLikeDto);
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateLike(int id, [FromBody] LikeDto likeDto)
         {
             if (likeDto == null) return BadRequest("Like data is null.");
-
             _manager.LikeService.UpdateOneLike(id, likeDto, true);
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteLike(int id)
+        [HttpDelete]
+        public IActionResult DeleteLike([FromQuery] int userId, [FromQuery] int questionId)
         {
-            _manager.LikeService.DeleteOneLike(id, true);
+            _manager.LikeService.DeleteOneLike(userId,questionId, true);
             return NoContent();
         }
     }

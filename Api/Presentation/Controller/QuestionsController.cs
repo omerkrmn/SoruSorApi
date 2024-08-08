@@ -24,34 +24,11 @@ namespace Presentation.Controller
             return StatusCode(201, question);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteQuestion([FromRoute] int id)
-        {
-            return Ok();
-        }
-
-        [HttpGet("user/{userId}")]
-        public IActionResult GetAllQuestionsByUser([FromRoute] int userId)
-        {
-            return Ok();
-        }
-
         [HttpGet("user/{userId}/with-likes")]
         public IActionResult GetAllQuestionsByUserWithLikesAndAnswer([FromRoute] int userId)
         {
-
             var questionsDetailsDto = _manager.QuestionService.GetAllQuestionWithUserId(userId);
-
-            // Sonuçları döndür
             return Ok(questionsDetailsDto);
         }
-
-        [HttpGet("{id}/user")]
-        public IActionResult GetOneQuestionWithUserId([FromRoute] int id)
-        {
-            return Ok();
-        }
-
-
     }
 }

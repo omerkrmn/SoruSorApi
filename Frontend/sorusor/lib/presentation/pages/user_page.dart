@@ -12,7 +12,7 @@ class UserListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('User List')),
       body: FutureBuilder<List<UserDto>>(
-        future: getUserData.execute('/user'),
+        future: getUserData.execute(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

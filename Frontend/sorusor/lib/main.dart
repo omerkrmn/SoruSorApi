@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sorusor/core/constants/application_constant.dart';
 import 'package:sorusor/core/services/api_service.dart';
 import 'package:sorusor/data/datasources/remote_data_source.dart';
 import 'package:sorusor/data/repositories/user_repository.dart';
@@ -14,13 +15,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // API Service ve Repository yapılandırması
-    final apiService =
-        ApiService('http://192.168.1.100:8080/api'); // API base URL
+    final apiService = ApiService(ApplicationConstant.API_URL);
     final remoteDataSource = RemoteDataSource(apiService);
     final userRepository = UserRepository(remoteDataSource);
-    final getUserData =
-        GetUserData(userRepository); // GetUserData nesnesini oluşturuyoruz
+    final getUserData = GetUserData(userRepository);
 
     return MaterialApp(
       title: 'User List App',

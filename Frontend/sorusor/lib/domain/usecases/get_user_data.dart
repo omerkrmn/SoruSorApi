@@ -8,7 +8,7 @@ class GetUserData {
 
   Future<List<UserDto>> execute(String endpoint) async {
     try {
-      return await userRepository.getSampleData(endpoint);
+      return await userRepository.getAllUsers(endpoint);
     } catch (e) {
       print('Error in GetUserData: $e');
       throw Exception('Failed to load user data');

@@ -9,8 +9,8 @@ namespace Repositories.Contracts.EntityContracts
 {
     public interface IAnswerRepository : IRepositoryBase<Answer>
     {
-        IQueryable<Answer> GetAllAnswers(bool trackChanges);
-        Answer GetOneAnswerById(int id, bool trackChanges);
+        Task<IEnumerable<Answer>> GetAllAnswersAsync(bool trackChanges);
+        Task<Answer> GetOneAnswerByIdAsync(int id, bool trackChanges);
         void CreateOneAnswer(Answer answer);
         void DeleteOneAnswer(Answer answer);
         void UpdateOneAnswer(Answer answer);

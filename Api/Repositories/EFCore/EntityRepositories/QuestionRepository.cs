@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts.EntityContracts;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,14 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void CreateOneQuestion(Question question) => Create(question);
 
-        public void DeleteOneQuestion(Question question)=>Delete(question);
+        public void DeleteOneQuestion(Question question) => Delete(question);
 
-        public IQueryable<Question> GetAllQuestions(bool trackChanges) => FindAll(trackChanges);
-        public Question GetOneQuestionById(int id, bool trackChanges) => 
-            FindByCondition(q => q.Id == id, trackChanges)
-            .SingleOrDefault();
-        public void UpdateOneQuestion(Question question)=>Update(question);
+        public async Task<IEnumerable<Question>> GetAllQuestionsAsync(bool trackChanges) => 
+            await FindAll(trackChanges)
+            .ToListAsync();
+        public async Task<Question> GetOneQuestionByIdAsync(int id, bool trackChanges) =>
+            await FindByCondition(q => q.Id == id, trackChanges)
+            .SingleOrDefaultAsync();
+        public void UpdateOneQuestion(Question question) => Update(question);
     }
 }

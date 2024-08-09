@@ -39,7 +39,7 @@ namespace Repositories.EFCore
         public ILikeRepository Like => _likeRepository.Value;
         #endregion
 
-        public void Save() => _context.SaveChanges();
+        public Task SaveAsync() => _context.SaveChangesAsync();
 
     }
 }

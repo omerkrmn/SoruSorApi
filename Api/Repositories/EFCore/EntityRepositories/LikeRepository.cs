@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts.EntityContracts;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,11 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void DeleteOneLike(Like like) => Delete(like);
 
-        public IQueryable<Like> GetAllLikes(bool trackChanges) => FindAll(trackChanges);
+        public async Task<IEnumerable<Like>> GetAllLikesAsync(bool trackChanges) => await FindAll(trackChanges).ToListAsync();
 
-        public Like GetOneLikeById(int id, bool trackChanges) =>
-            FindByCondition(l => l.Id == id, trackChanges)
-            .SingleOrDefault();
+        public async Task<Like> GetOneLikeByIdAsync(int id, bool trackChanges) =>
+           await FindByCondition(l => l.Id == id, trackChanges)
+            .SingleOrDefaultAsync();
 
         public void UpdateOneLike(Like like) => Update(like);
     }

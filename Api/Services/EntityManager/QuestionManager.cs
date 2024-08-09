@@ -20,29 +20,29 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public QuestionDto CreateOneQuestion(QuestionDtoForInsert questionDto)
+        public async Task<QuestionDto> CreateOneQuestionAsync(QuestionDtoForInsert questionDto)
         {
             if (questionDto == null)
                 throw new ArgumentNullException(nameof(questionDto), "QuestionDTO cannot be null.");
             var question = _mapper.Map<Question>(questionDto);
             _manager.Question.CreateOneQuestion(question);
-            _manager.Save();
+            await _manager.SaveAsync();
             var createdQuestionDto = _mapper.Map<QuestionDto>(question);
             return createdQuestionDto;
         }
 
 
 
-        public IEnumerable<QuestionDto> GetAllQuestions(bool trackChanges)
+        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(bool trackChanges)
         {
-            var questions = _manager.Question.GetAllQuestions(trackChanges);
+            var questions =await _manager.Question.GetAllQuestionsAsync(trackChanges);
             var questionDtos = _mapper.Map<IEnumerable<QuestionDto>>(questions);
             return questionDtos;
         }
 
-        public QuestionDto GetOneQuestionById(int id, bool trackChanges)
+        public async Task<QuestionDto >GetOneQuestionByIdAsync(int id, bool trackChanges)
         {
-            var question = _manager.Question.GetOneQuestionById(id, trackChanges);
+            var question =await _manager.Question.GetOneQuestionByIdAsync(id, trackChanges);
             if (question == null)
                 throw new EntityNotFoundException<Question>(id);
             var questionDto = _mapper.Map<QuestionDto>(question);
@@ -51,16 +51,17 @@ namespace Services.EntityManager
         }
 
 
-        public IEnumerable<QuestionsDetailsDTO> GetAllQuestionWithUserId(int userId)
+        public async Task<IEnumerable<QuestionsDetailsDTO>> GetAllQuestionWithUserIdAsync(int userId)
         {
-            var user = _manager.User.GetOneUserById(userId, false);
+            var user =await _manager.User.GetOneUserByIdAsync(userId, false);
             if (user == null) throw new EntityNotFoundException<User>(userId);
 
-            var userQuestions = _manager.Question
+            var userQuestions = await _manager.Question
                 .FindByCondition(q => q.ReciveUserId == userId, false)
                 .Include(q => q.Likes) 
                 .Include(q => q.Answer) 
-                .ToList();
+                .ToListAsync();
+
             var questionsDetailsDto = userQuestions.Select(question => new QuestionsDetailsDTO
             {
                 Id = question.Id,

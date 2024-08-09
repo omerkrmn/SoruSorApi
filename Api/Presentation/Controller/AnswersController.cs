@@ -22,7 +22,7 @@ namespace Presentation.Controller
             _manager = manager;
         }
         [HttpPost("AddAnswer")]
-        public IActionResult AddAnswer([FromQuery] int questionId, [FromQuery] string answerText)
+        public async Task<IActionResult> AddAnswer([FromQuery] int questionId, [FromQuery] string answerText)
         {
             if (string.IsNullOrEmpty(answerText))
                 return BadRequest("Answer text cannot be null or empty.");
@@ -33,16 +33,16 @@ namespace Presentation.Controller
                 Content = answerText
             };
 
-            var createdAnswer = _manager.AnswerService.CreateAnswer(answerDto);
+            var createdAnswer = await _manager.AnswerService.CreateAnswerAsync(answerDto);
 
             return CreatedAtAction(nameof(GetOneAnswerById), new { id = createdAnswer.Id }, createdAnswer);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetOneAnswerById(int id)
+        public async Task<IActionResult> GetOneAnswerById(int id)
         {
 
-            var answer = _manager.AnswerService.GetOneAnswerById(id, false);
+            var answer = await _manager.AnswerService.GetOneAnswerByIdAsync(id, false);
             return Ok(answer);
 
         }

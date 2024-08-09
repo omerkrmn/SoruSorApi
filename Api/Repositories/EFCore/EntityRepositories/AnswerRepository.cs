@@ -1,6 +1,8 @@
 ﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts.EntityContracts;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +20,12 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void DeleteOneAnswer(Answer answer)=>Delete(answer);
 
-        public IQueryable<Answer> GetAllAnswers(bool trackChanges)=>FindAll(trackChanges);
+        public async Task<IEnumerable<Answer>> GetAllAnswersAsync(bool trackChanges)=>
+            await FindAll(trackChanges).ToListAsync();
 
-        public Answer GetOneAnswerById(int id, bool trackChanges) =>
-            FindByCondition(a => a.Id == id, trackChanges)
-            .SingleOrDefault();
+        public async Task<Answer> GetOneAnswerByIdAsync(int id, bool trackChanges) =>
+            await FindByCondition(a => a.Id == id, trackChanges)
+            .SingleOrDefaultAsync();
         public void UpdateOneAnswer(Answer answer)=>Update(answer);
     }
 }

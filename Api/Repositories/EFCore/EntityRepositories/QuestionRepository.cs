@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts.EntityContracts;
 using System;
@@ -19,8 +20,11 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void DeleteOneQuestion(Question question) => Delete(question);
 
-        public async Task<IEnumerable<Question>> GetAllQuestionsAsync(bool trackChanges) => 
+        //
+        public async Task<IEnumerable<Question>> GetAllQuestionsAsync(QuestionParameters questionParameters, bool trackChanges) =>
             await FindAll(trackChanges)
+            .Skip((questionParameters.PageNumber - 1) * questionParameters.PageSize)
+            .Take(questionParameters.PageSize)
             .ToListAsync();
         public async Task<Question> GetOneQuestionByIdAsync(int id, bool trackChanges) =>
             await FindByCondition(q => q.Id == id, trackChanges)

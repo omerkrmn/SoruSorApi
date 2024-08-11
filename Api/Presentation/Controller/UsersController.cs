@@ -17,35 +17,39 @@ namespace Presentation.Controller
         {
             _manager = manager;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers() {
-            var users =await _manager.UserService.GetAllUsersAsync(false); 
-            return  Ok(users);
+
+        [HttpGet("api/users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _manager.UserService.GetAllUsersAsync(false);
+            return Ok(users);
         }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetOneUser([FromRoute]int id)
+        [HttpGet("api/users/{id:int}")]
+        public async Task<IActionResult> GetOneUser([FromRoute] int id)
         {
             var user = await _manager.UserService.GetOneUserByIdAsync(id, false);
             return Ok(user);
         }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost("CreateOneUser")]
-        public async Task<IActionResult> CreateOneUser([FromBody()] UserDtoForInsert UserDtoForInsert)
+        [HttpPost("api/users")]
+        public async Task<IActionResult> CreateOneUser([FromBody] UserDtoForInsert UserDtoForInsert)
         {
             var user = await _manager.UserService.CreateOneUserAsync(UserDtoForInsert);
-            return StatusCode(201,user);
+            return CreatedAtAction(nameof(GetOneUser), new { id = user.Id }, user);
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("api/users/")]
         public async Task<IActionResult> DeleteUser(UserDto userDto)
         {
             await _manager.UserService.DeleteOneUserAsync(userDto, true);
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody]UserDto userDto) 
+        [HttpPut("api/users")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             var user = await _manager.UserService.UpdateOneUserAsync(userDto, true);
             return Ok(user);

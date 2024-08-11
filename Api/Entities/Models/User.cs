@@ -3,14 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
         public string? NickName { get; set; }
         [EmailAddress]
-        public string Mail{ get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsActive { get; set; } = true;
 

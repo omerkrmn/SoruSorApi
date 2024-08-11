@@ -18,21 +18,15 @@ namespace Repositories.EFCore.EntityRepositories
         }
 
         public void CreateOneUser(User user) => Create(user);
-
         public void DeleteOneUser(User user) => Delete(user);
-
         public async Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges) => 
             await FindAll(trackChanges)
             .Where(u => u.IsActive == true)
             .ToListAsync();
-
         public async Task<User> GetOneUserByIdAsync(int id, bool trackChanges) =>
              await FindByCondition(b => b.Id == id, trackChanges)
             .Where(u=>u.IsActive==true)
             .SingleOrDefaultAsync();
-
-        
-
         public void UpdateOneUser(User user) => Update(user);
     }
 }

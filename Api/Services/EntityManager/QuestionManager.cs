@@ -2,6 +2,7 @@
 using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Repositories.Contracts;
@@ -33,9 +34,9 @@ namespace Services.EntityManager
 
 
 
-        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(bool trackChanges)
+        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(QuestionParameters questionParameters,bool trackChanges)
         {
-            var questions =await _manager.Question.GetAllQuestionsAsync(trackChanges);
+            var questions =await _manager.Question.GetAllQuestionsAsync(questionParameters,trackChanges);
             var questionDtos = _mapper.Map<IEnumerable<QuestionDto>>(questions);
             return questionDtos;
         }

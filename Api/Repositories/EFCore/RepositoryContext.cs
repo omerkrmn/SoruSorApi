@@ -1,21 +1,25 @@
 ﻿using Entities.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repositories.EFCore.Config;
 
 namespace Repositories.EFCore
 {
-    public class RepositoryContext : DbContext
+    public class RepositoryContext : IdentityDbContext<User,IdentityRole<int>, int>
     {
 
         public RepositoryContext(DbContextOptions options)
         : base(options)
         { }
-        public DbSet<User> Users { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Answer> Answers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<User>()
                 .HasMany(u => u.QuestionsAsked)
                 .WithOne(q => q.AskedBy)

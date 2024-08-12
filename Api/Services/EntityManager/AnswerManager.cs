@@ -21,50 +21,50 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public IEnumerable<AnswerDto> GetAllAnswers(bool trackChanges)
+        public async Task<IEnumerable<AnswerDto>> GetAllAnswersAsync(bool trackChanges)
         {
-            var answers = _manager.Answer.GetAllAnswers(trackChanges);
+            var answers = await _manager.Answer.GetAllAnswersAsync(trackChanges);
             return _mapper.Map<IEnumerable<AnswerDto>>(answers);
         }
 
-        public AnswerDto GetOneAnswerById(int id, bool trackChanges)
+        public async Task<AnswerDto> GetOneAnswerByIdAsync(int id, bool trackChanges)
         {
-            var answer = _manager.Answer.GetOneAnswerById(id, trackChanges);
+            var answer = await _manager.Answer.GetOneAnswerByIdAsync(id, trackChanges);
             if (answer == null) throw new EntityNotFoundException<Answer>(id);
             return _mapper.Map<AnswerDto>(answer);
         }
 
-        public AnswerDto CreateAnswer(AnswerDtoForInsert answerDto)
+        public async Task<AnswerDto> CreateAnswerAsync(AnswerDtoForInsert answerDto)
         {
             if (answerDto == null) throw new ArgumentNullException(nameof(answerDto));
 
             var answer = _mapper.Map<Answer>(answerDto);
             _manager.Answer.CreateOneAnswer(answer);
-            _manager.Save();
+            await _manager.SaveAsync();
 
             return _mapper.Map<AnswerDto>(answer);
         }
 
-        public void UpdateOneAnswer(AnswerDto answerDto, bool trackChanges)
+        public async Task UpdateOneAnswerAsync(AnswerDto answerDto, bool trackChanges)
         {
             if (answerDto == null) throw new ArgumentNullException(nameof(answerDto));
 
-            var entity = _manager.Answer.GetOneAnswerById(answerDto.Id, trackChanges);
+            var entity = await _manager.Answer.GetOneAnswerByIdAsync(answerDto.Id, trackChanges);
             if (entity == null) throw new EntityNotFoundException<Answer>(answerDto.Id);
 
             _mapper.Map(answerDto, entity);
 
             _manager.Answer.UpdateOneAnswer(entity);
-            _manager.Save();
+            await _manager.SaveAsync();
         }
 
-        public void DeleteOneAnswer(int id, bool trackChanges)
+        public async Task DeleteOneAnswerAsync(int id, bool trackChanges)
         {
-            var entity = _manager.Answer.GetOneAnswerById(id, trackChanges);
+            var entity = await _manager.Answer.GetOneAnswerByIdAsync(id, trackChanges);
             if (entity == null) throw new EntityNotFoundException<Answer>(id);
 
             _manager.Answer.DeleteOneAnswer(entity);
-            _manager.Save();
+            await _manager.SaveAsync();
         }
     }
 }

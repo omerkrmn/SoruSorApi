@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts.EntityContracts;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,17 @@ namespace Repositories.EFCore.EntityRepositories
 
         public void DeleteOneUser(User user) => Delete(user);
 
-        public IQueryable<User> GetAllUsers(bool trackChanges) => 
-            FindAll(trackChanges)
-            .Where(u => u.IsActive == true);
+        public async Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges) => 
+            await FindAll(trackChanges)
+            .Where(u => u.IsActive == true)
+            .ToListAsync();
 
-        public User GetOneUserById(int id, bool trackChanges) =>
-            FindByCondition(b => b.Id == id, trackChanges)
+        public async Task<User> GetOneUserByIdAsync(int id, bool trackChanges) =>
+             await FindByCondition(b => b.Id == id, trackChanges)
             .Where(u=>u.IsActive==true)
-            .SingleOrDefault();
+            .SingleOrDefaultAsync();
+
+        
 
         public void UpdateOneUser(User user) => Update(user);
     }

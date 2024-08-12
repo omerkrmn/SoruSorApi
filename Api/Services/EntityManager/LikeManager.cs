@@ -20,59 +20,63 @@ namespace Services.EntityManager
             _mapper = mapper;
         }
 
-        public IEnumerable<LikeDto> GetAllLikes(bool trackChanges)
+        public async Task<IEnumerable<LikeDto>> GetAllLikesAsync(bool trackChanges)
         {
-            var likes = _manager.Like.GetAllLikes(trackChanges);
+            var likes = await _manager.Like.GetAllLikesAsync(trackChanges);
             return _mapper.Map<IEnumerable<LikeDto>>(likes);
         }
 
-        public LikeDto GetOneLikeById(int id, bool trackChanges)
+        public async Task<LikeDto> GetOneLikeByIdAsync(int id, bool trackChanges)
         {
-            var like = _manager.Like.GetOneLikeById(id, trackChanges);
+            var like = await _manager.Like.GetOneLikeByIdAsync(id, trackChanges);
             if (like == null) throw new EntityNotFoundException<Like>(id);
             return _mapper.Map<LikeDto>(like);
         }
 
-        public LikeDto CreateOneLike(LikeDtoForInsert likeInsertDto)
+        public async Task<LikeDto> CreateOneLikeAsync(LikeDtoForInsert likeInsertDto)
         {
             if (likeInsertDto == null)
                 throw new ArgumentNullException(nameof(likeInsertDto));
-            var existingLike = _manager.Like.GetAllLikes(false)
-                .FirstOrDefault(l => l.UserId == likeInsertDto.UserId && l.QuestionId == likeInsertDto.QuestionId);
+
+            var likes = await _manager.Like.GetAllLikesAsync(false);
+            var existingLike = likes
+            .FirstOrDefault(l => l.UserId == likeInsertDto.UserId && l.QuestionId == likeInsertDto.QuestionId);
+
+
             if (existingLike != null)
                 throw new InvalidOperationException("The user has already liked this question.");
 
             var like = _mapper.Map<Like>(likeInsertDto);
             _manager.Like.CreateOneLike(like);
-            _manager.Save();
+            await _manager.SaveAsync();
 
             return _mapper.Map<LikeDto>(like);
         }
 
-        public void UpdateOneLike(int id, LikeDto likeDto, bool trackChanges)
+        public async Task UpdateOneLikeAsync(int id, LikeDto likeDto, bool trackChanges)
         {
             if (likeDto == null) throw new ArgumentNullException(nameof(likeDto));
 
-            var entity = _manager.Like.GetOneLikeById(id, trackChanges);
+            var entity = await _manager.Like.GetOneLikeByIdAsync(id, trackChanges);
             if (entity == null) throw new EntityNotFoundException<Like>(id);
 
             _mapper.Map(likeDto, entity);
 
             _manager.Like.UpdateOneLike(entity);
-            _manager.Save();
+            await _manager.SaveAsync();
         }
 
-        public void DeleteOneLike(int userId, int questionId, bool trackChanges)
+        public async Task DeleteOneLikeAsync(int userId, int questionId, bool trackChanges)
         {
-            var like = _manager.Like.GetAllLikes(false)
-                 .Where(x => x.QuestionId == questionId && x.UserId == userId)
-                 .SingleOrDefault();
+            var likes = await _manager.Like.GetAllLikesAsync(false);
+            var like = likes.Where(x => x.QuestionId == questionId && x.UserId == userId)
+                    .SingleOrDefault();
             if (like == null) throw new ArgumentNullException(nameof(like));
 
             _manager.Like.DeleteOneLike(like);
-            _manager.Save();
+            await _manager.SaveAsync();
         }
 
-        
+
     }
 }

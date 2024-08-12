@@ -9,8 +9,8 @@ namespace Repositories.Contracts.EntityContracts
 {
     public interface IUserRepository :IRepositoryBase<User>
     {
-        IQueryable<User> GetAllUsers(bool trackChanges);
-        User GetOneUserById(int id,bool trackChanges);
+        Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges);
+        Task<User> GetOneUserByIdAsync(int id,bool trackChanges);
         void CreateOneUser(User user);
         void DeleteOneUser(User user);
         void UpdateOneUser(User user);

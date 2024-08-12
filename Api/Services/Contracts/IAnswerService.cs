@@ -10,10 +10,10 @@ namespace Services.Contracts
 {
     public interface IAnswerService
     {
-        IEnumerable<AnswerDto> GetAllAnswers(bool trackChanges);
-        AnswerDto GetOneAnswerById(int id, bool trackChanges);
-        AnswerDto CreateAnswer(AnswerDtoForInsert answer);
-        void UpdateOneAnswer(AnswerDto answer, bool trackChanges);
-        void DeleteOneAnswer(int id, bool trackChanges);
+        Task<IEnumerable<AnswerDto>> GetAllAnswersAsync(bool trackChanges);
+        Task<AnswerDto> GetOneAnswerByIdAsync(int id, bool trackChanges);
+        Task<AnswerDto> CreateAnswerAsync(AnswerDtoForInsert answer);
+        Task UpdateOneAnswerAsync(AnswerDto answer, bool trackChanges);
+        Task DeleteOneAnswerAsync(int id, bool trackChanges);
     }
 }

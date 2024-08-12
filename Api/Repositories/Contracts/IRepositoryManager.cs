@@ -13,6 +13,6 @@ namespace Repositories.Contracts
         IQuestionRepository Question {  get; }
         IAnswerRepository Answer {  get; }
         ILikeRepository Like {  get; }
-        void Save();
+        Task SaveAsync();
     }
 }

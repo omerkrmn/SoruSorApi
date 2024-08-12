@@ -5,10 +5,10 @@ namespace Services.Contracts
 {
     public interface IQuestionService
     {
-        QuestionDto CreateOneQuestion(QuestionDtoForInsert questionDtoForInsert);
-        IEnumerable<QuestionDto> GetAllQuestions(bool trackChanges);
-        QuestionDto GetOneQuestionById(int id, bool trackChanges);
-        IEnumerable<QuestionsDetailsDTO> GetAllQuestionWithUserId(int id);
+        Task<QuestionDto> CreateOneQuestionAsync(QuestionDtoForInsert questionDtoForInsert);
+        Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(bool trackChanges);
+        Task<QuestionDto> GetOneQuestionByIdAsync(int id, bool trackChanges);
+        Task<IEnumerable<QuestionsDetailsDTO>> GetAllQuestionWithUserIdAsync(int id);
         
     }
 }

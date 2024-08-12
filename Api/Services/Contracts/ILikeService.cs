@@ -10,10 +10,10 @@ namespace Services.Contracts
 {
     public interface ILikeService
     {
-        IEnumerable<LikeDto> GetAllLikes(bool trackChanges);
-        LikeDto GetOneLikeById(int id, bool trackChanges);
-        LikeDto CreateOneLike(LikeDtoForInsert likeInsertDto);
-        void UpdateOneLike(int id, LikeDto likedto, bool trackChanges);
-        void DeleteOneLike(int userId, int questionId, bool trackChanges);
+        Task<IEnumerable<LikeDto>> GetAllLikesAsync(bool trackChanges);
+        Task<LikeDto> GetOneLikeByIdAsync(int id, bool trackChanges);
+        Task<LikeDto> CreateOneLikeAsync(LikeDtoForInsert likeInsertDto);
+        Task UpdateOneLikeAsync(int id, LikeDto likedto, bool trackChanges);
+        Task DeleteOneLikeAsync(int userId, int questionId, bool trackChanges);
     }
 }

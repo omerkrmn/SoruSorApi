@@ -18,16 +18,16 @@ namespace Presentation.Controller
         }
 
         [HttpPost("AddQuestion")]
-        public IActionResult AddQuestion([FromBody] QuestionDtoForInsert questionDto)
+        public async Task<IActionResult> AddQuestion([FromBody] QuestionDtoForInsert questionDto)
         {
-            var question = _manager.QuestionService.CreateOneQuestion(questionDto);
+            var question = await _manager.QuestionService.CreateOneQuestionAsync(questionDto);
             return StatusCode(201, question);
         }
 
         [HttpGet("user/{userId}/with-likes")]
-        public IActionResult GetAllQuestionsByUserWithLikesAndAnswer([FromRoute] int userId)
+        public async Task<IActionResult> GetAllQuestionsByUserWithLikesAndAnswer([FromRoute] int userId)
         {
-            var questionsDetailsDto = _manager.QuestionService.GetAllQuestionWithUserId(userId);
+            var questionsDetailsDto = await _manager.QuestionService.GetAllQuestionWithUserIdAsync(userId);
             return Ok(questionsDetailsDto);
         }
     }

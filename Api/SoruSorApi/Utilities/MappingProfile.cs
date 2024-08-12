@@ -9,28 +9,22 @@ namespace SoruSorApi.Utilities
         public MappingProfile()
         {
             // User mappings
-            CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>();
-            CreateMap<UserDtoForInsert, User>();
-            CreateMap<User, UserDtoForInsert>();
+            CreateMap<UserForRegisterDTO,User>();
+
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UserDtoForInsert, User>().ReverseMap();
 
             // Question mappings
-            CreateMap<Question, QuestionDto>();
-            CreateMap<QuestionDto, Question>();
-            CreateMap<QuestionDtoForInsert, Question>();
-            CreateMap<Question, QuestionDtoForInsert>();
+            CreateMap<Question, QuestionDto>().ReverseMap();
+            CreateMap<QuestionDtoForInsert, Question>().ReverseMap();
 
             // Answer mappings
-            CreateMap<Answer, AnswerDto>();
-            CreateMap<AnswerDto, Answer>();
-            CreateMap<AnswerDtoForInsert, Answer>();
-            CreateMap<Answer, AnswerDtoForInsert>();
+            CreateMap<Answer, AnswerDto>().ReverseMap();
+            CreateMap<AnswerDtoForInsert, Answer>().ReverseMap();
 
             // Like mappings
-            CreateMap<Like, LikeDto>();
-            CreateMap<LikeDto, Like>();
-            CreateMap<Like, LikeDtoForInsert>();
-            CreateMap<LikeDtoForInsert, Like>();
+            CreateMap<Like, LikeDto>().ReverseMap();
+            CreateMap<Like, LikeDtoForInsert>().ReverseMap();
 
             // Mapping for QuestionsDetailsDTO
             CreateMap<Question, QuestionsDetailsDTO>()
@@ -40,7 +34,7 @@ namespace SoruSorApi.Utilities
 
             CreateMap<QuestionsDetailsDTO, Question>()
                 .ForMember(dest => dest.Answer, opt => opt.MapFrom(src => src.Answer))
-                .ForMember(dest => dest.Likes, opt => opt.Ignore()); // Ignore Likes during mapping
+                .ForMember(dest => dest.Likes, opt => opt.Ignore()); 
         }
     }
 }

@@ -2,6 +2,8 @@
 using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Repositories.Contracts;
@@ -13,11 +15,13 @@ namespace Services.EntityManager
     {
         private readonly IRepositoryManager _manager;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public QuestionManager(IRepositoryManager manager, IMapper mapper)
+        public QuestionManager(IRepositoryManager manager, IMapper mapper, UserManager<User> userManager)
         {
             _manager = manager;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<QuestionDto> CreateOneQuestionAsync(QuestionDtoForInsert questionDto)
@@ -33,9 +37,9 @@ namespace Services.EntityManager
 
 
 
-        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(bool trackChanges)
+        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync(QuestionParameters questionParameters,bool trackChanges)
         {
-            var questions =await _manager.Question.GetAllQuestionsAsync(trackChanges);
+            var questions =await _manager.Question.GetAllQuestionsAsync(questionParameters,trackChanges);
             var questionDtos = _mapper.Map<IEnumerable<QuestionDto>>(questions);
             return questionDtos;
         }
@@ -53,7 +57,7 @@ namespace Services.EntityManager
 
         public async Task<IEnumerable<QuestionsDetailsDTO>> GetAllQuestionWithUserIdAsync(int userId)
         {
-            var user =await _manager.User.GetOneUserByIdAsync(userId, false);
+            var user = _userManager.Users.Where(u=>u.Id == userId).FirstOrDefault();
             if (user == null) throw new EntityNotFoundException<User>(userId);
 
             var userQuestions = await _manager.Question

@@ -1,5 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Repositories.EFCore;
+using Microsoft.AspNetCore.Builder;
 using SoruSorApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +12,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigRepositoryManager();
 builder.Services.ConfigServiceManager();
-//Configure AutoMapper
+
+builder.Services.ConfigIdentity();
+builder.Services.ConfigJWT(builder.Configuration);
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
@@ -30,6 +32,9 @@ if (app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

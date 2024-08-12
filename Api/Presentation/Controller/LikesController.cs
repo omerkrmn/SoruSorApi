@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities.DTOs;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -35,7 +36,7 @@ namespace Presentation.Controller
             await _manager.LikeService.UpdateOneLikeAsync(id, likeDto, true);
             return NoContent();
         }
-
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteLike([FromQuery] int userId, [FromQuery] int questionId)
         {

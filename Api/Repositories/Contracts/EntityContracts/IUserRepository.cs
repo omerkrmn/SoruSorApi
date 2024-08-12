@@ -14,6 +14,5 @@ namespace Repositories.Contracts.EntityContracts
         void CreateOneUser(User user);
         void DeleteOneUser(User user);
         void UpdateOneUser(User user);
-
     }
 }

@@ -21,7 +21,7 @@ namespace Services
             _userService = new Lazy<IUserService>(() => new UserManager(manager, mapper));
             
             _answerService = new Lazy<IAnswerService>(() => new AnswerManager(manager, mapper));
-            _questionService = new Lazy<IQuestionService>(() => new QuestionManager(manager, mapper));
+            _questionService = new Lazy<IQuestionService>(() => new QuestionManager(manager, mapper,userManager));
             _likeService = new Lazy<ILikeService>(() => new LikeManager(manager, mapper));
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationManager(userManager, mapper, configuration));
         }

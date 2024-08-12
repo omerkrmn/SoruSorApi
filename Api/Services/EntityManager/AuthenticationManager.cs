@@ -94,14 +94,12 @@ namespace Services.EntityManager
             List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-
             var tokenOptions = new JwtSecurityToken(
                     issuer: jwtSettings["validIssuer"],
                     audience: jwtSettings["validAudience"],
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
                     signingCredentials: signinCredentials);
-
             return tokenOptions;
         }
 

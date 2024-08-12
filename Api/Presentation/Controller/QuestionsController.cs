@@ -17,7 +17,7 @@ namespace Presentation.Controller
         {
             _manager = manager;
         }
-        [Authorize]
+      
         [HttpPost(Name = "AddQuestion")]
         public async Task<IActionResult> AddQuestion([FromBody] QuestionDtoForInsert questionDto)
         {
@@ -25,7 +25,7 @@ namespace Presentation.Controller
             return StatusCode(201, question);
         }
         // pagination 
-        [Authorize]
+     
         [HttpGet("user/{userId}/with-likes")]
         public async Task<IActionResult> GetAllQuestionsByUserWithLikesAndAnswer([FromRoute] int userId)
         {

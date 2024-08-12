@@ -9,6 +9,7 @@ namespace Repositories.Contracts
 {
     public interface IRepositoryManager
     {
+        // user silinecek
         IUserRepository User {  get; }
         IQuestionRepository Question {  get; }
         IAnswerRepository Answer {  get; }

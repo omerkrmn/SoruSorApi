@@ -15,7 +15,6 @@ namespace Repositories.EFCore
         private readonly RepositoryContext _context;
 
         #region LazyLoading For Repositories
-        private readonly Lazy<IUserRepository> _userRepository;
         private readonly Lazy<IQuestionRepository> _questionRepository;
         private readonly Lazy<IAnswerRepository> _answerRepository;
         private readonly Lazy<ILikeRepository> _likeRepository;
@@ -25,7 +24,6 @@ namespace Repositories.EFCore
         {
             _context = context;
             #region Create Lazy Instance
-            _userRepository = new Lazy<IUserRepository>(() => new UserRepository(_context));
             _answerRepository = new Lazy<IAnswerRepository>(() => new AnswerRepository(_context));
             _likeRepository = new Lazy<ILikeRepository>(() => new LikeRepository(_context));
             _questionRepository = new Lazy<IQuestionRepository>(() => new QuestionRepository(_context));
@@ -33,7 +31,6 @@ namespace Repositories.EFCore
         }
 
         #region Return Instance Value
-        public IUserRepository User => _userRepository.Value;
         public IQuestionRepository Question => _questionRepository.Value;
         public IAnswerRepository Answer => _answerRepository.Value;
         public ILikeRepository Like => _likeRepository.Value;

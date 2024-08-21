@@ -8,8 +8,8 @@ namespace Services.Contracts
 {
     public interface IServiceManager
     {
-        IUserService UserService { get; }
         IQuestionService QuestionService { get; }
+        IUserService UserService { get; }
         ILikeService LikeService { get; }
         IAnswerService AnswerService { get; }
         IAuthenticationService AuthenticationService { get; }

@@ -48,11 +48,22 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Image Source="C:\Users\omerkaraman\Documents\GithubRepos\SoruSor\SoruSorApi\Frontend\Frontend\Frontend\Res\Images\email-image.png" Height="30" />
-                        <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Email" Style="{StaticResource textHint}"/>
+                        <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Email or User Name" Style="{StaticResource textHint}"/>
                         <TextBox x:Name="txtUserName" TextChanged="txtUserName_TextChanged"/>
                     </Grid>
                 </Border>
-                
+                <Border BorderThickness="1" BorderBrush="#acb0af"  Margin="20 7" CornerRadius="5">
+                    <Grid Margin="7 9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="C:\Users\omerkaraman\Documents\GithubRepos\SoruSor\SoruSorApi\Frontend\Frontend\Frontend\Res\Images\password-icon.png" Height="30" />
+                        <TextBlock x:Name="textPassword" MouseDown="textPassword_MouseDown" Text="Password" Style="{StaticResource textHint}"/>
+                        <TextBox x:Name="txtPassword" TextChanged="txtPassword_TextChanged"  />
+                    </Grid>
+                </Border>
+
             </StackPanel>
         </Border>
     </Grid>

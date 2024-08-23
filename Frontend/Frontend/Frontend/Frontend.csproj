@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="Res\Images\email-image.png" />
+    <None Remove="Res\Images\password-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Res\Images\email-image.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Res\Images\password-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

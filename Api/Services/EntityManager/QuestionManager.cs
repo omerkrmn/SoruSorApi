@@ -26,8 +26,13 @@ namespace Services.EntityManager
 
         public async Task<QuestionDto> CreateOneQuestionAsync(QuestionDtoForInsert questionDto)
         {
+            // Exceptions can be customized
             if (questionDto == null)
                 throw new ArgumentNullException(nameof(questionDto), "QuestionDTO cannot be null.");
+            if (await _userManager.FindByIdAsync(questionDto.ReciveUserId.ToString()) == null)
+                throw new EntityNotFoundException<User>(questionDto.ReciveUserId);
+            if (await _userManager.FindByIdAsync(questionDto.AskedById.ToString()) == null)
+                throw new EntityNotFoundException<User>(questionDto.AskedById);
             var question = _mapper.Map<Question>(questionDto);
             _manager.Question.CreateOneQuestion(question);
             await _manager.SaveAsync();

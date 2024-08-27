@@ -27,6 +27,8 @@ namespace Presentation.Controller
             if (string.IsNullOrEmpty(answerText))
                 return BadRequest("Answer text cannot be null or empty.");
 
+
+
             var answerDto = new AnswerDtoForInsert
             {
                 QuestionId = questionId,

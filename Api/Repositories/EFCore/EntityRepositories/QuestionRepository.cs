@@ -19,8 +19,6 @@ namespace Repositories.EFCore.EntityRepositories
         public void CreateOneQuestion(Question question) => Create(question);
 
         public void DeleteOneQuestion(Question question) => Delete(question);
-
-        //
         public async Task<IEnumerable<Question>> GetAllQuestionsAsync(QuestionParameters questionParameters, bool trackChanges) =>
             await FindAll(trackChanges)
             .Skip((questionParameters.PageNumber - 1) * questionParameters.PageSize)

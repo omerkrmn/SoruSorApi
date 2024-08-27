@@ -28,8 +28,7 @@ namespace Services.EntityManager
 
         public async Task<ICollection<UserDto>> SearchUserAsync(string nickName)
         {
-            nickName.Trim();
-            nickName.ToLower();
+            nickName.Trim().ToLower();
             var users = await _userManager.Users
                 .Where(u => u.NickName
                 .ToLower()

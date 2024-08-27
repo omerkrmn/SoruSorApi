@@ -22,7 +22,7 @@ namespace Presentation.Controller
         }
 
 
-        [HttpGet("")]
+        [HttpGet("/{nickName}")]
         public async Task<IActionResult> SearchUsers([FromQuery] string nickName)
         {
             if (string.IsNullOrWhiteSpace(nickName))
@@ -35,7 +35,6 @@ namespace Presentation.Controller
 
             return Ok(users);
         }
-
 
     }
 }

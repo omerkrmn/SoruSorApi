@@ -30,5 +30,6 @@ namespace Front
         {
             this.WindowState = WindowState.Minimized;
         }
+        
     }
 }

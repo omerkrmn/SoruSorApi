@@ -21,7 +21,6 @@ namespace Services.EntityManager
         private readonly IMapper _mapper;
         private readonly UserManager<User> userManager;
         private readonly IConfiguration _configuration;
-
         private User? _user;
 
         public AuthenticationManager(UserManager<User> userManager, IMapper mapper, IConfiguration configuration)

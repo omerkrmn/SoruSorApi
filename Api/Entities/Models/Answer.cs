@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models
 {
     public class Answer
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Content { get; set; }
         public DateTime CreatedDate { get; set; }
         public int QuestionId { get; set; }

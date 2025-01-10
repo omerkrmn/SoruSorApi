@@ -1,0 +1,36 @@
+﻿@page
+@model SoruSorFront.Pages.IndexModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<h1 class="text-center my-4">Hoş Geldiniz!</h1>
+
+<p class="text-muted text-center">Bu, uygulamanızın ana sayfasıdır. Buradan diğer sayfalara erişebilirsiniz.</p>
+
+<h2 class="my-5 text-primary">Sorular</h2>
+<div class="row">
+    @foreach (var question in Model.Questions.Take(2))
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Soru</h5>
+                    <p class="card-text"><strong>İçerik:</strong> @question.content</p>
+                    @if (question.answer != null)
+                    {
+                        <p class="card-text"><strong>Cevap:</strong> @question.answer.content</p>
+                    }
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-around border-top">
+                    <button class="btn btn-link text-success">
+                        <i class="bi bi-hand-thumbs-up"></i> @question.likeCount
+                    </button>
+                    <button class="btn btn-link text-danger">
+                        <i class="bi bi-hand-thumbs-down"></i> @question.dislikeCount
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

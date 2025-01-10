@@ -1,0 +1,9 @@
+services:
+  sorusorapi:
+    image: ${DOCKER_REGISTRY-}sorusorapi
+    build:
+      context: .
+      dockerfile: SoruSorApi/Dockerfile 
+    ports:
+      - "5000:5000"
+      - "5001:5001"
